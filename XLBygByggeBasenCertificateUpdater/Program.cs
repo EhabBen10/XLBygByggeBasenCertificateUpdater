@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using CertificateUpdater.Services.Services;
+
+GetKatalogChangesService getKatalogChangesService = new GetKatalogChangesService();
+getKatalogChangesService.GetKatalogChanges(default);
