@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace CertificateUpdater.Services.Responses.getProduktBatch;
-internal sealed record ProduktBatchResultData
+internal sealed record ProduktBatchResult
 {
-	[JsonPropertyName("KatalogData")]
-	public ICollection<KatalogData> KatalogData { get; set; } = new List<KatalogData>();
+	[JsonPropertyName("Result")]
+	public ICollection<ResultData> ResultData { get; set; } = new List<ResultData>();
 }

@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CertificateUpdater.Services.Services;
-internal class getProduktBatchService
+public class getProduktBatchService
 {
 }
