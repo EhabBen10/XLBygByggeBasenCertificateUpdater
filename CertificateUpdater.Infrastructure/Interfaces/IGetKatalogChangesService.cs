@@ -1,7 +1,7 @@
 ﻿using CertificateUpdater.Domain.Entities;
 
-namespace CertificateUpdater.Infrastructure.Interfaces;
+namespace CertificateUpdater.Services.Interfaces;
 public interface IGetKatalogChangesService
 {
-	public ICollection<CatChange> GetKatalogChanges();
+	public Task<ICollection<CatChange>> GetKatalogChanges(CancellationToken cancellationToken);
 }

@@ -4,7 +4,7 @@ using CertificateUpdater.Services.Responses.getProduktBatch;
 namespace CertificateUpdater.Services.Mapping;
 internal static class getProduktBatchResponseToProducts
 {
-	internal static List<Product> ToProducts(this List<getProduktBatchResponse> responses)
+	internal static List<Product> ToProducts(this List<GetProductBatchResponse> responses)
 	{
 		if (responses is null)
 		{

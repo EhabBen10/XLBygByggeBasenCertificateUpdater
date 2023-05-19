@@ -1,10 +1,10 @@
 ﻿using CertificateUpdater.Domain.Entities;
-using CertificateUpdater.Infrastructure.Responses.GetKatalogChanges;
+using CertificateUpdater.Services.Responses.GetKatalogChanges;
 
 namespace CertificateUpdater.Services.Mapping;
 internal static class GetKatalogChangesResponseToKatalogChanges
 {
-	internal static List<CatChange> ToKatalogChanges(this List<GetKatalogChangesResponse> responses)
+	internal static ICollection<CatChange> ToKatalogChanges(this GetKatalogChangesResponse responses)
 	{
 		if (responses is null)
 		{
@@ -12,21 +12,21 @@ internal static class GetKatalogChangesResponseToKatalogChanges
 		}
 		List<CatChange> results = new List<CatChange>();
 
-		foreach (var response in responses)
+
+		foreach (var response in responses.Result.CatChangesData)
 		{
-			if (response.CatChangeData is null)
+			if (response is null)
 			{
 				throw new ArgumentNullException(nameof(response));
 			}
-			foreach (var change in response.CatChangeData)
+
+			CatChange result = new()
 			{
-				CatChange catChange = new()
-				{
-					EmneId = change.EmneId,
-					Tunnr = change.Tunnr,
-				};
-				results.Add(catChange);
-			}
+				EmneId = response.EmneId,
+				Tunnr = response.Tunnr,
+			};
+
+			results.Add(result);
 		}
 		return results;
 	}
