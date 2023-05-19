@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using CertificateUpdater.Services.Responses.GetKatalogChanges;
 
 namespace CertificateUpdater.Services.Responses.getProduktBatch;
-internal sealed record getProduktBatchResponse
+internal sealed record GetProductBatchResponse
 {
-	[JsonPropertyName("Result")]
-	public ICollection<ProduktBatchResultData> ResultData { get; set; } = new List<ProduktBatchResultData>();
+	[JsonPropertyName("getProduktBatchResult")]
+	public GetProduktBatchResult Result { get; set; } = new GetProduktBatchResult();
 }
