@@ -19,8 +19,12 @@ BaseSettings settings = new ByggeBasenSettings()
 IOptions<BaseSettings> byggeBasenSettings = Options.Create(settings);
 IClient<BaseSettings> client = new RestSharpClient<BaseSettings>(byggeBasenSettings);
 IRelevantTunnrFinder relevantTunnrFinder = new RelevantTunnrFinder();
+ICertificationChangeFinder certificationChangeFinder = new CertificationChangeFinder();
 
-GetKatalogChangesService getKatalogChangesService = new GetKatalogChangesService(client, logProvider, credentialProvider);
-var result = await getKatalogChangesService.GetKatalogChanges(default);
-var tunnr = relevantTunnrFinder.FindRelevantTunnrs(result);
+IGetKatalogChangesService getKatalogChangesService = new GetKatalogChangesService(client, logProvider, credentialProvider);
+IGetProductBatchService getProductBatchService = new GetProductBatchService(client, credentialProvider);
+var catChangesResult = await getKatalogChangesService.GetKatalogChanges(default);
+var tunnr = relevantTunnrFinder.FindRelevantTunnrs(catChangesResult);
+var productResult = await getProductBatchService.GetProductBatch(tunnr, default);
+var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult);
 Console.WriteLine("End");

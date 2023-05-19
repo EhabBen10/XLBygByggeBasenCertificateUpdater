@@ -1,10 +1,10 @@
 ﻿using CertificateUpdater.Domain.Entities;
-using CertificateUpdater.Services.Responses.getProduktBatch;
+using CertificateUpdater.Services.Responses.GetProductBatch;
 
 namespace CertificateUpdater.Services.Mapping;
 internal static class getProduktBatchResponseToProducts
 {
-	internal static List<Product> ToProducts(this List<GetProductBatchResponse> responses)
+	internal static List<Product> ToProducts(this GetProductBatchResponse responses)
 	{
 		if (responses is null)
 		{
@@ -12,25 +12,28 @@ internal static class getProduktBatchResponseToProducts
 		}
 		List<Product> results = new List<Product>();
 
-		foreach (var response in responses)
+		foreach (var response in responses.Result.ResultData)
 		{
-			if (response.ResultData is null)
+			if (response is null)
 			{
 				throw new ArgumentNullException(nameof(response));
 			}
-			Product product = new();
-			foreach (var change in response.ResultData)
+			Product result = new();
+			result.ProductText = response.ProductText1 + " " + response.ProductText2;
+			result.SupplierNr = response.SupplierNr;
+			result.DBNr = response.DBNr;
+			result.CompanyName = response.CompanyName;
+
+			foreach (var katalog in response.KatalogData)
 			{
-				Katalog newKatalog = new Katalog();
-				foreach (var katalog in change.KatalogData)
+				result.KatalogData.Add(new()
 				{
-					newKatalog.isValid = katalog.Valid;
-					newKatalog.Tunnr = katalog.Tunnr;
-					newKatalog.EmneId = katalog.EmneId;
-				};
-				product.KatalogData.Add(newKatalog);
+					isValid = katalog.isValid,
+					EmneId = katalog.EmneId,
+					Tunnr = katalog.Tunnr,
+				});
 			}
-			results.Add(product);
+			results.Add(result);
 		}
 		return results;
 	}

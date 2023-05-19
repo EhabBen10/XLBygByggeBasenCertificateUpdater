@@ -3,7 +3,7 @@
 public class CertificationChange
 {
 	public string CompanyName { get; set; } = string.Empty;
-	public int SuplierNr { get; set; }
+	public int SupplierNr { get; set; }
 	public int DBNr { get; set; }
 	public string ProductText { get; set; } = string.Empty;
 	public bool hasDGNB { get; set; }
@@ -19,5 +19,4 @@ public class CertificationChange
 	public bool hasAstmaOgAllergi { get; set; }
 	public bool hasEPD { get; set; }
 	public bool hasALUK { get; set; }
-
 }
