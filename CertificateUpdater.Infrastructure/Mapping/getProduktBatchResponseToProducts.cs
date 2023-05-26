@@ -19,7 +19,7 @@ internal static class getProduktBatchResponseToProducts
 				throw new ArgumentNullException(nameof(response));
 			}
 			Product result = new();
-			result.ProductText = response.ProductText1 + " " + response.ProductText2;
+			result.ProductText = response.ProductText1;
 			result.SupplierNr = response.SupplierNr;
 			result.DBNr = response.DBNr;
 			result.CompanyName = response.CompanyName;

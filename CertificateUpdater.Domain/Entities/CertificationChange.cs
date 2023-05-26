@@ -12,6 +12,7 @@ public class CertificationChange
 	public bool hasBREEAM { get; set; }
 	public bool hasC2C { get; set; }
 	public bool hasDBE { get; set; }
+	public bool hasLEED { get; set; }
 	public bool hasFSC { get; set; }
 	public bool hasPEFC { get; set; }
 	public bool hasIndeKlima { get; set; }

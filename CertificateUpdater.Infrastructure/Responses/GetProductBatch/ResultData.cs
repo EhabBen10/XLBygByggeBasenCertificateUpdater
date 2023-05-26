@@ -18,8 +18,4 @@ internal sealed record ResultData
 
 	[JsonPropertyName("VARETEKST1")]
 	public string ProductText1 { get; set; } = string.Empty;
-
-	[JsonPropertyName("VARETEKST2")]
-	public string ProductText2 { get; set; } = string.Empty;
-
 }

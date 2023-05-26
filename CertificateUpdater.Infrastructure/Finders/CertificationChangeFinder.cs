@@ -59,6 +59,9 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 					case (int)CertificationEnum.AllergyUK:
 						certificationChange.hasALUK = katalog.isValid;
 						break;
+					case (int)CertificationEnum.LEED:
+						certificationChange.hasLEED = katalog.isValid;
+						break;
 					default:
 						break;
 				}

@@ -45,7 +45,8 @@ public sealed class LocalFileLogProvider : ILogProvider
 				{
 					string currentLine = line.Replace(",", "");
 					string format = "yyyy-MM-ddTH:mm:ss.fffZ";
-					string date = "/Date(" + DateTime.ParseExact(currentLine, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) + ")/";
+					string unix = Convert.ToString(((DateTimeOffset)DateTime.ParseExact(currentLine, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)).ToUnixTimeMilliseconds());
+					string date = "/Date(" + unix + ")/";
 					logDates.Add(date);
 				}
 			}

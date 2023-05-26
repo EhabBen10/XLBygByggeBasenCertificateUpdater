@@ -12,7 +12,6 @@ internal static class GetKatalogChangesResponseToKatalogChanges
 		}
 		List<CatChange> results = new List<CatChange>();
 
-
 		foreach (var response in responses.Result.CatChangesData)
 		{
 			if (response is null)
@@ -24,10 +23,14 @@ internal static class GetKatalogChangesResponseToKatalogChanges
 			{
 				EmneId = response.EmneId,
 				Tunnr = response.Tunnr,
+				CreatedAt = Convert.ToDateTime(response.Created),
 			};
-
 			results.Add(result);
 		}
+		List<CatChange> filteredObjects = results
+		   .GroupBy(obj => obj.Tunnr)
+				.Select(group => group.OrderByDescending(obj => obj.CreatedAt).First())
+		   .ToList();
 		return results;
 	}
 }

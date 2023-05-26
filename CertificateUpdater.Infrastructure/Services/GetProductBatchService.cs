@@ -20,24 +20,59 @@ public sealed class GetProductBatchService : IGetProductBatchService
 	public async Task<ICollection<Product>> GetProductBatch(ICollection<int> tunnrs, CancellationToken cancellationToken)
 	{
 		RestRequest request = new RestRequest("http://servicetest.byggebasen.com/EPDTEST/BBService.svc/getProduktBatch");
-		getProduktBatchBody body = new()
+		IResponse<GetProductBatchResponse> response;
+		List<Product> allChanges = new List<Product>();
+
+		if (tunnrs.Count < 1000)
 		{
-			tunnr = tunnrs.ToList(),
-			tunUser = new TunUser()
+			getProduktBatchBody body = new()
 			{
-				TunUserNr = CredentialProvider.GetTunUserNr(),
-				UserName = CredentialProvider.GetUserName(),
-				Password = CredentialProvider.GetPassword()
+				tunnr = tunnrs,
+				tunUser = new TunUser()
+				{
+					TunUserNr = CredentialProvider.GetTunUserNr(),
+					UserName = CredentialProvider.GetUserName(),
+					Password = CredentialProvider.GetPassword()
+				}
+			};
+			request.AddHeader("Content-Type", "application/json");
+			request.AddHeader("Accept", "application/json");
+			var json = JsonSerializer.Serialize(body);
+			request.AddParameter("application/json", json, ParameterType.RequestBody);
+
+			response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
+			var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
+			return changes.Value;
+		}
+		int startNumber = 0;
+		int endNumber = 999;
+
+		while (endNumber != tunnrs.Count)
+		{
+			getProduktBatchBody body = new()
+			{
+				tunnr = tunnrs.Skip(startNumber).Take(endNumber - startNumber).ToList(),
+				tunUser = new TunUser()
+				{
+					TunUserNr = CredentialProvider.GetTunUserNr(),
+					UserName = CredentialProvider.GetUserName(),
+					Password = CredentialProvider.GetPassword()
+				}
+			};
+			request.AddHeader("Content-Type", "application/json");
+			request.AddHeader("Accept", "application/json");
+			var json = JsonSerializer.Serialize(body);
+			request.AddParameter("application/json", json, ParameterType.RequestBody);
+
+			response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
+			var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
+			foreach (var item in changes.Value)
+			{
+				allChanges.Add(item);
 			}
-		};
-		request.AddHeader("Content-Type", "application/json");
-		request.AddHeader("Accept", "application/json");
-		var json = JsonSerializer.Serialize(body);
-		request.AddParameter("application/json", json, ParameterType.RequestBody);
-
-		var response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
-		var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
-
-		return changes.Value;
+			startNumber = endNumber + 1;
+			endNumber = tunnrs.Count - endNumber < 1000 ? tunnrs.Count : endNumber + 1000;
+		}
+		return allChanges;
 	}
 }
