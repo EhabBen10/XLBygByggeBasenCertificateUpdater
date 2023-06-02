@@ -11,7 +11,7 @@ internal sealed record ResultData
 	public string CompanyName { get; set; } = string.Empty;
 
 	[JsonPropertyName("LEVERANDOERNR")]
-	public int SupplierNr { get; set; }
+	public string SupplierNr { get; set; } = string.Empty;
 
 	[JsonPropertyName("DBNR")]
 	public int DBNr { get; set; }

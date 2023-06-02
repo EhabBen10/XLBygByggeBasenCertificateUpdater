@@ -1,7 +1,7 @@
 ﻿using CertificateUpdater.Domain.Entities;
 
 namespace CertificateUpdater.Domain.RequestBodies;
-public sealed class PostChangeBatchBody
+public sealed record PostChangeBatchBody
 {
-	public List<CertificationChange> Changes { get; set; } = new List<CertificationChange>();
+	public ICollection<CertificationChange> Changes { get; set; } = new List<CertificationChange>();
 }

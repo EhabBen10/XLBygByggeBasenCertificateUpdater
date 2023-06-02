@@ -19,12 +19,12 @@ public sealed class GetProductBatchService : IGetProductBatchService
 	}
 	public async Task<ICollection<Product>> GetProductBatch(ICollection<int> tunnrs, CancellationToken cancellationToken)
 	{
-		RestRequest request = new RestRequest("http://servicetest.byggebasen.com/EPDTEST/BBService.svc/getProduktBatch");
 		IResponse<GetProductBatchResponse> response;
-		List<Product> allChanges = new List<Product>();
+		ICollection<Product> allChanges = new List<Product>();
 
 		if (tunnrs.Count < 1000)
 		{
+			RestRequest request = new("http://services.byggebasen.dk/V3/BBService.svc/getProduktBatch");
 			getProduktBatchBody body = new()
 			{
 				tunnr = tunnrs,
@@ -49,6 +49,7 @@ public sealed class GetProductBatchService : IGetProductBatchService
 
 		while (endNumber != tunnrs.Count)
 		{
+			RestRequest request = new("http://services.byggebasen.dk/V3/BBService.svc/getProduktBatch");
 			getProduktBatchBody body = new()
 			{
 				tunnr = tunnrs.Skip(startNumber).Take(endNumber - startNumber).ToList(),

@@ -1,5 +1,5 @@
 ﻿namespace CertificateUpdater.Domain.RequestBodies;
-public sealed class TunUser
+public sealed record TunUser
 {
 	public int TunUserNr { get; set; }
 	public string UserName { get; set; } = string.Empty;

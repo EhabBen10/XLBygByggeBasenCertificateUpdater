@@ -19,30 +19,30 @@ public sealed class LocalFileCredentialProvider : ICredentialProvider
 
 	public int GetTunUserNr()
 	{
-		using StreamReader sr = new StreamReader(TunnrFileName);
+		using StreamReader sr = new(TunnrFileName);
 		return Convert.ToInt32(sr.ReadToEnd());
 	}
 
 	public string GetUserName()
 	{
-		using StreamReader sr = new StreamReader(UserNameFileName);
+		using StreamReader sr = new(UserNameFileName);
 		return sr.ReadToEnd();
 	}
 
 	public string GetPassword()
 	{
-		using StreamReader sr = new StreamReader(PasswordFileName);
+		using StreamReader sr = new(PasswordFileName);
 		return sr.ReadToEnd();
 	}
 	public string GetAspect4Username()
 	{
-		using StreamReader sr = new StreamReader(Aspect4UsernameFileName);
+		using StreamReader sr = new(Aspect4UsernameFileName);
 		return sr.ReadToEnd();
 	}
 
 	public string GetAspect4Password()
 	{
-		using StreamReader sr = new StreamReader(Aspect4PasswordFileName);
+		using StreamReader sr = new(Aspect4PasswordFileName);
 		return sr.ReadToEnd();
 	}
 }

@@ -10,11 +10,13 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 		ICollection<CertificationChange> certificationChanges = new List<CertificationChange>();
 		foreach (Product product in products)
 		{
-			CertificationChange certificationChange = new CertificationChange();
-			certificationChange.CompanyName = product.CompanyName;
-			certificationChange.DBNr = product.DBNr;
-			certificationChange.ProductText = product.ProductText;
-			certificationChange.SupplierNr = product.SupplierNr;
+			CertificationChange certificationChange = new()
+			{
+				CompanyName = product.CompanyName,
+				DBNr = product.DBNr,
+				ProductText = product.ProductText,
+				SupplierNr = product.SupplierNr
+			};
 
 			foreach (var katalog in product.KatalogData)
 			{

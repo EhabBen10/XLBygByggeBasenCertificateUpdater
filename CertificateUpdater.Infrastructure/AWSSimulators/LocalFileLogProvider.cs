@@ -12,18 +12,17 @@ public sealed class LocalFileLogProvider : ILogProvider
 	public ICollection<string> GetAllLogDates()
 	{
 		ICollection<string> logDates = new List<string>();
-		using (StreamReader sr = new StreamReader(FileName))
+		using (StreamReader sr = new(FileName))
 		{
 			string? text = sr.ReadToEnd();
-			if (text is not null)
+			if (!string.IsNullOrWhiteSpace(text))
 			{
 				string[] lines = text.Split(Environment.NewLine);
 
 				foreach (var line in lines)
 				{
-					string currentLine = line.Replace(",", "");
 					string format = "yyyy-MM-ddTH:mm:ss.fffZ";
-					string date = "/Date(" + DateTime.ParseExact(currentLine, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) + ")/";
+					string date = "/Date(" + DateTime.ParseExact(line, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) + ")/";
 					logDates.Add(date);
 				}
 			}
@@ -34,18 +33,17 @@ public sealed class LocalFileLogProvider : ILogProvider
 	public string GetLastLog()
 	{
 		ICollection<string> logDates = new List<string>();
-		using (StreamReader sr = new StreamReader(FileName))
+		using (StreamReader sr = new(FileName))
 		{
 			string? text = sr.ReadToEnd();
-			if (text is not null)
+			if (!string.IsNullOrWhiteSpace(text))
 			{
 				string[] lines = text.Split(Environment.NewLine);
 
 				foreach (var line in lines)
 				{
-					string currentLine = line.Replace(",", "");
-					string format = "yyyy-MM-ddTH:mm:ss.fffZ";
-					string unix = Convert.ToString(((DateTimeOffset)DateTime.ParseExact(currentLine, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)).ToUnixTimeMilliseconds());
+					string format = "yyyy-MM-ddThh:mm:ss.fffZ";
+					string unix = Convert.ToString(((DateTimeOffset)DateTime.ParseExact(line, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)).ToUnixTimeMilliseconds());
 					string date = "/Date(" + unix + ")/";
 					logDates.Add(date);
 				}

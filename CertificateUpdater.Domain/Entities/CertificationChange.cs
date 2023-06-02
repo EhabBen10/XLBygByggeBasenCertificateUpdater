@@ -1,9 +1,9 @@
 ﻿namespace CertificateUpdater.Domain.Entities;
 
-public class CertificationChange
+public sealed record CertificationChange
 {
 	public string CompanyName { get; set; } = string.Empty;
-	public int SupplierNr { get; set; }
+	public string SupplierNr { get; set; } = string.Empty;
 	public int DBNr { get; set; }
 	public string ProductText { get; set; } = string.Empty;
 	public bool hasDGNB { get; set; }

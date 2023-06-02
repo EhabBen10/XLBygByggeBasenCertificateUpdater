@@ -23,7 +23,7 @@ public sealed class PostChangesService : IPostChangesService
 		CredentialProvider = credentialProvider ?? throw new ArgumentNullException(nameof(credentialProvider));
 	}
 
-	public async Task PostChangeBatch(List<CertificationChange> changes, CancellationToken cancellationToken)
+	public async Task PostChangeBatch(ICollection<CertificationChange> changes, CancellationToken cancellationToken)
 	{
 		var request = new RestRequest("http://ditas02:1043/xzu_a4ws/rest/v1/query/XZU_DB_update/POST");
 		var requestBody = new PostChangeBatchBody
@@ -35,11 +35,9 @@ public sealed class PostChangesService : IPostChangesService
 		var serializer = new XmlSerializer(typeof(PostChangeBatchBody));
 		await using (var stringWriter = new Utf8StringWriter())
 		{
-			await using (XmlWriter writer = XmlWriter.Create(stringWriter, new XmlWriterSettings { Async = true }))
-			{
-				serializer.Serialize(writer, requestBody);
-				xml = stringWriter.ToString(); // Your XML
-			}
+			await using XmlWriter writer = XmlWriter.Create(stringWriter, new XmlWriterSettings { Async = true });
+			serializer.Serialize(writer, requestBody);
+			xml = stringWriter.ToString();
 		}
 		request.AddHeader("Accept", "application/xml");
 		request.AddParameter("application/xml", xml, ParameterType.RequestBody);

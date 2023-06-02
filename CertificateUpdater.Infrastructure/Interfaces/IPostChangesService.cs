@@ -3,5 +3,5 @@
 namespace CertificateUpdater.Services.Interfaces;
 public interface IPostChangesService
 {
-	public Task PostChangeBatch(List<CertificationChange> changes, CancellationToken cancellationToken);
+	public Task PostChangeBatch(ICollection<CertificationChange> changes, CancellationToken cancellationToken);
 }
