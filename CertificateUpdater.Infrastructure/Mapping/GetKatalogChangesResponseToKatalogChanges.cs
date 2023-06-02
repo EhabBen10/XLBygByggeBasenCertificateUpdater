@@ -10,8 +10,7 @@ internal static class GetKatalogChangesResponseToKatalogChanges
 		{
 			throw new ArgumentNullException(nameof(responses));
 		}
-		List<CatChange> results = new List<CatChange>();
-
+		ICollection<CatChange> results = new List<CatChange>();
 
 		foreach (var response in responses.Result.CatChangesData)
 		{
@@ -24,11 +23,14 @@ internal static class GetKatalogChangesResponseToKatalogChanges
 			{
 				EmneId = response.EmneId,
 				Tunnr = response.Tunnr,
+				CreatedAt = Convert.ToDateTime(response.Created),
 			};
-
 			results.Add(result);
 		}
+		ICollection<CatChange> filteredObjects = results
+		   .GroupBy(obj => obj.Tunnr)
+				.Select(group => group.OrderByDescending(obj => obj.CreatedAt).First())
+		   .ToList();
 		return results;
 	}
 }
-

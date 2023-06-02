@@ -3,5 +3,4 @@ public interface ILogProvider
 {
 	public ICollection<string> GetAllLogDates();
 	public string GetLastLog();
-
 }

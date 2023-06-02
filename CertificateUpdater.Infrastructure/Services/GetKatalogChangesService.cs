@@ -22,8 +22,7 @@ public sealed class GetKatalogChangesService : IGetKatalogChangesService
 	}
 	public async Task<ICollection<CatChange>> GetKatalogChanges(CancellationToken cancellationToken)
 	{
-		RestRequest request = new RestRequest("http://servicetest.byggebasen.com/EPDTEST/BBService.svc/GetKatalogChanges");
-		var options = new RestClientOptions("http://servicetest.byggebasen.com/EPDTEST/BBService.svc/");
+		RestRequest request = new("http://services.byggebasen.dk/V3/BBService.svc/GetKatalogChanges");
 		GetKatalogChangesBody body = new()
 		{
 			fromDate = LogProvider.GetLastLog(),

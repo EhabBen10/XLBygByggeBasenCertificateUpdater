@@ -1,5 +1,5 @@
 ﻿namespace CertificateUpdater.Domain.Entities;
-public class Katalog
+public sealed record Katalog
 {
 	public int EmneId { get; set; }
 	public bool isValid { get; set; }

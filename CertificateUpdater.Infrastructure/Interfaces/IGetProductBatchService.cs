@@ -3,6 +3,5 @@
 namespace CertificateUpdater.Services.Interfaces;
 public interface IGetProductBatchService
 {
-	public Task<ICollection<Product>> GetProducts(CancellationToken cancellationToken);
-
+	public Task<ICollection<Product>> GetProductBatch(ICollection<int> tunnrs, CancellationToken cancellationToken);
 }

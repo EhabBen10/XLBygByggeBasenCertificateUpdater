@@ -2,7 +2,7 @@
 public enum CertificationEnum
 {
 	EPD = 24,
-	IndeKklima = 30,
+	IndeKlima = 30,
 	FSC = 32,
 	SvanemærkeEUBlomse = 34,
 	DGNB = 36,

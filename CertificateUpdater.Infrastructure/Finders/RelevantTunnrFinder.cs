@@ -17,10 +17,6 @@ public class RelevantTunnrFinder : IRelevantTunnrFinder
 					result.Add(catChange.Tunnr);
 				}
 			}
-			else
-			{
-				int test = catChange.EmneId;
-			}
 		}
 		return result;
 	}

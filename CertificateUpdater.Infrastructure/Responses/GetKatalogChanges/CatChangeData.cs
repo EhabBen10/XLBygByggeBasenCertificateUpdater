@@ -9,4 +9,7 @@ internal sealed record CatChangeData
 
 	[JsonPropertyName("Tunnr")]
 	public int Tunnr { get; set; }
+
+	[JsonPropertyName("Created")]
+	public string Created { get; set; } = string.Empty;
 }
