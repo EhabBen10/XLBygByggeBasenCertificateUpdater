@@ -1,13 +1,14 @@
-﻿using System.Globalization;
-using CertificateUpdater.Services.Interfaces;
+﻿using CertificateUpdater.Services.Interfaces;
 
 namespace CertificateUpdater.Services.AWSSimulators;
 public sealed class LocalFileLogProvider : ILogProvider
 {
 	public string FileName { get; set; }
-	public LocalFileLogProvider(string fileName)
+	public IDateTimeProvider DateTimeProvider { get; set; }
+	public LocalFileLogProvider(string fileName, IDateTimeProvider dateTimeProvider)
 	{
 		FileName = fileName;
+		DateTimeProvider = dateTimeProvider ?? throw new ArgumentNullException(nameof(dateTimeProvider));
 	}
 	public ICollection<string> GetAllLogDates()
 	{
@@ -21,8 +22,10 @@ public sealed class LocalFileLogProvider : ILogProvider
 
 				foreach (var line in lines)
 				{
-					string format = "yyyy-MM-ddTH:mm:ss.fffZ";
-					string date = "/Date(" + DateTime.ParseExact(line, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) + ")/";
+					string currentLine = line.Replace(",", "");
+					string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
+					string unix = DateTimeProvider.ParseToUnix(currentLine, format);
+					string date = "/Date(" + unix + ")/";
 					logDates.Add(date);
 				}
 			}
@@ -42,13 +45,21 @@ public sealed class LocalFileLogProvider : ILogProvider
 
 				foreach (var line in lines)
 				{
-					string format = "yyyy-MM-ddThh:mm:ss.fffZ";
-					string unix = Convert.ToString(((DateTimeOffset)DateTime.ParseExact(line, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)).ToUnixTimeMilliseconds());
+					string currentLine = line.Replace(",", "");
+					string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
+					string unix = DateTimeProvider.ParseToUnix(currentLine, format);
 					string date = "/Date(" + unix + ")/";
 					logDates.Add(date);
 				}
 			}
+			return logDates.Last();
 		}
-		return logDates.Last();
+	}
+	public void UpdateLog()
+	{
+		DateTime newestRun = DateTimeProvider.GetNowMinus1Hour();
+		string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
+		using StreamWriter sw = new(FileName, true);
+		sw.Write(",\r\n" + newestRun.ToString(format));
 	}
 }

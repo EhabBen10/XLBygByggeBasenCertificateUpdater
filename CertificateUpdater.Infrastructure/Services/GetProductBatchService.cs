@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using CertificateUpdater.Domain.Entities;
 using CertificateUpdater.Domain.RequestBodies;
+using CertificateUpdater.Domain.Shared;
 using CertificateUpdater.Services.Interfaces;
 using CertificateUpdater.Services.Mapping;
 using CertificateUpdater.Services.Responses.GetProductBatch;
@@ -17,10 +18,10 @@ public sealed class GetProductBatchService : IGetProductBatchService
 		CredentialProvider = credentialProvider ?? throw (new ArgumentNullException(nameof(credentialProvider)));
 		RestClient = restClient ?? throw (new ArgumentNullException(nameof(restClient)));
 	}
-	public async Task<ICollection<Product>> GetProductBatch(ICollection<int> tunnrs, CancellationToken cancellationToken)
+	public async Task<Result<ICollection<Product>>> GetProductBatch(ICollection<int> tunnrs, CancellationToken cancellationToken)
 	{
 		IResponse<GetProductBatchResponse> response;
-		ICollection<Product> allChanges = new List<Product>();
+		Result<ICollection<Product>> allChanges = new List<Product>();
 
 		if (tunnrs.Count < 1000)
 		{
@@ -41,8 +42,7 @@ public sealed class GetProductBatchService : IGetProductBatchService
 			request.AddParameter("application/json", json, ParameterType.RequestBody);
 
 			response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
-			var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
-			return changes.Value;
+			return response.GetResult(getProduktBatchResponseToProducts.ToProducts);
 		}
 		int startNumber = 0;
 		int endNumber = 999;
@@ -67,9 +67,12 @@ public sealed class GetProductBatchService : IGetProductBatchService
 
 			response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
 			var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
-			foreach (var item in changes.Value)
+			if (changes.IsSuccess)
 			{
-				allChanges.Add(item);
+				foreach (var item in changes.Value)
+				{
+					allChanges.Value.Add(item);
+				}
 			}
 			startNumber = endNumber + 1;
 			endNumber = tunnrs.Count - endNumber < 1000 ? tunnrs.Count : endNumber + 1000;

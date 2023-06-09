@@ -1,13 +1,14 @@
 ﻿using System.Text;
 using CertificateUpdater.Domain.Entities;
+using CertificateUpdater.Domain.Shared;
 using CertificateUpdater.Services.Interfaces;
 
 namespace CertificateUpdater.Services.Services;
 public sealed class CSVFileCreator : ICSVFileCreator
 {
-	public void CreateCSVFiles(List<CertificationChange> changes)
+	public Result CreateCSVFiles(List<CertificationChange> changes)
 	{
-		string file = @"C:\Users\AME\OneDrive - XL-BYG a.m.b.a\Documents\Byggebasen\ResultCSV\MyTest.csv";
+		string file = @"C:\Users\AME\OneDrive - XL-BYG a.m.b.a\Documents\Byggebasen\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".csv";
 		string separator = ";";
 		StringBuilder output = new();
 		string[] headings = { "Firmanavn",  "Leverandørnr", "DB nr.", "Varetekst 1", "DGNB", "Svanemærke",  "Svanemærket byggeri", "BREEAM",
@@ -29,11 +30,11 @@ public sealed class CSVFileCreator : ICSVFileCreator
 		{
 			using StreamWriter writer = new(file, true, Encoding.UTF8);
 			writer.Write(output.ToString());
+			return Result.Success();
 		}
 		catch (Exception)
 		{
-			Console.WriteLine("Data could not be written to the CSV file.");
-			return;
+			return Result.Failure(Error.NullValue);
 		}
 	}
 }

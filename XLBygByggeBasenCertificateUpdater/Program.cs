@@ -1,13 +1,15 @@
 ﻿using CertificateUpdater.Services.AWSSimulators;
 using CertificateUpdater.Services.Finders;
 using CertificateUpdater.Services.Interfaces;
+using CertificateUpdater.Services.Providers;
 using CertificateUpdater.Services.RestSharp;
 using CertificateUpdater.Services.Services;
 using CertificateUpdater.Services.Settings;
 using Microsoft.Extensions.Options;
 
 string basePath = "C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Documents\\Byggebasen\\AWSSimulator\\";
-ILogProvider logProvider = new LocalFileLogProvider(basePath + "RunLog.txt");
+IDateTimeProvider dateTimeProvider = new DateTimeProvider();
+ILogProvider logProvider = new LocalFileLogProvider(basePath + "RunLog.txt", dateTimeProvider);
 ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "TunUserNr.txt", basePath + "UserName.txt",
 	basePath + "Password.txt", basePath + "Aspect4Username.txt", basePath + "Aspect4Password.txt");
 BaseSettings settings = new ByggeBasenSettings()
@@ -29,8 +31,17 @@ ICSVFileCreator cSVFileCreator = new CSVFileCreator();
 //IPostChangesService postChangesService = new PostChangesService(client, credentialProvider);
 
 var catChangesResult = await getKatalogChangesService.GetKatalogChanges(default);
-var tunnr = relevantTunnrFinder.FindRelevantTunnrs(catChangesResult);
+if (catChangesResult.IsFailure)
+{
+	throw new Exception(catChangesResult.Error.Message);
+}
+var tunnr = relevantTunnrFinder.FindRelevantTunnrs(catChangesResult.Value);
 var productResult = await getProductBatchService.GetProductBatch(tunnr, default);
-var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult);
+if (productResult.IsFailure)
+{
+	throw new Exception(productResult.Error.Message);
+}
+var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult.Value);
 cSVFileCreator.CreateCSVFiles(certificationResult.ToList());
+logProvider.UpdateLog();
 Console.WriteLine("end");

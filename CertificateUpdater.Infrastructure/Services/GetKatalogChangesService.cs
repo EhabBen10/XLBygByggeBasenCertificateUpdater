@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using CertificateUpdater.Domain.Entities;
 using CertificateUpdater.Domain.RequestBodies;
+using CertificateUpdater.Domain.Shared;
 using CertificateUpdater.Services.Interfaces;
 using CertificateUpdater.Services.Mapping;
 using CertificateUpdater.Services.Responses.GetKatalogChanges;
@@ -20,7 +21,7 @@ public sealed class GetKatalogChangesService : IGetKatalogChangesService
 		RestClient = restClient ?? throw (new ArgumentNullException(nameof(restClient)));
 
 	}
-	public async Task<ICollection<CatChange>> GetKatalogChanges(CancellationToken cancellationToken)
+	public async Task<Result<ICollection<CatChange>>> GetKatalogChanges(CancellationToken cancellationToken)
 	{
 		RestRequest request = new("http://services.byggebasen.dk/V3/BBService.svc/GetKatalogChanges");
 		GetKatalogChangesBody body = new()
@@ -39,8 +40,6 @@ public sealed class GetKatalogChangesService : IGetKatalogChangesService
 		request.AddParameter("application/json", json, ParameterType.RequestBody);
 
 		var response = await RestClient.PostAsync<GetKatalogChangesResponse>(request, cancellationToken);
-		var changes = response.GetResult(GetKatalogChangesResponseToKatalogChanges.ToKatalogChanges);
-
-		return changes.Value;
+		return response.GetResult(GetKatalogChangesResponseToKatalogChanges.ToKatalogChanges);
 	}
 }
