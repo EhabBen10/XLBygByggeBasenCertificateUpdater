@@ -29,24 +29,37 @@ IGetKatalogChangesService getKatalogChangesService = new GetKatalogChangesServic
 IGetProductBatchService getProductBatchService = new GetProductBatchService(client, credentialProvider);
 ICSVFileCreator cSVFileCreator = new CSVFileCreator();
 //IPostChangesService postChangesService = new PostChangesService(client, credentialProvider);
-Console.WriteLine("Getting all changes to product katalogs");
+Console.WriteLine("(1/6) Getting all changes to product katalogs");
 var catChangesResult = await getKatalogChangesService.GetKatalogChanges(default);
 if (catChangesResult.IsFailure)
 {
-	throw new Exception(catChangesResult.Error.Message);
+	Console.WriteLine(catChangesResult.Error.Message);
+	Thread.Sleep(10000);
+	return;
 }
-Console.WriteLine("Finding relevant changes to product katalogs");
+
+Console.WriteLine("(2/6) Finding relevant changes to product katalogs");
 var tunnr = relevantTunnrFinder.FindRelevantTunnrs(catChangesResult.Value);
-Console.WriteLine("Getting all changed products");
+Console.WriteLine("(3/6) Getting all changed products");
 var productResult = await getProductBatchService.GetProductBatch(tunnr, default);
 if (productResult.IsFailure)
 {
-	throw new Exception(productResult.Error.Message);
+	Console.WriteLine(productResult.Error.Message);
+	Thread.Sleep(10000);
+	return;
 }
-Console.WriteLine("Finding changes to certification");
+Console.WriteLine("(4/6) Finding changes to certification");
 var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult.Value);
-Console.WriteLine("Creating Csv File");
-cSVFileCreator.CreateCSVFiles(certificationResult.ToList());
-Console.WriteLine("Updating RunLog");
+Console.WriteLine("(5/6) Creating Csv File");
+var csvResult = cSVFileCreator.CreateCSVFiles(certificationResult.ToList());
+if (csvResult.IsFailure)
+{
+	Console.WriteLine(csvResult.Error.Message);
+	Thread.Sleep(20000);
+	return;
+
+}
+Console.WriteLine("(6/6) Updating RunLog");
 logProvider.UpdateLog();
 Console.WriteLine("End");
+

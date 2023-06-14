@@ -12,6 +12,11 @@ public sealed class CSVFileCreator : ICSVFileCreator
 	public Result CreateCSVFiles(List<CertificationChange> changes)
 	{
 		string file = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".csv";
+		if (File.Exists(file))
+		{
+			return Result.Failure(new Error("File already exists", "An error occured because this program has already been run today, please check if the existing csv file contains what you need, " +
+				"if not delete it and the entry in the run log corresponding to today"));
+		}
 
 		try
 		{
