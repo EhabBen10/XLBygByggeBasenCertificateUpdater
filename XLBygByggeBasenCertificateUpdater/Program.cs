@@ -43,5 +43,5 @@ if (productResult.IsFailure)
 }
 var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult.Value);
 cSVFileCreator.CreateCSVFiles(certificationResult.ToList());
-//logProvider.UpdateLog();
+logProvider.UpdateLog();
 Console.WriteLine("end");

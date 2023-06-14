@@ -28,10 +28,10 @@ public sealed class CSVFileCreator : ICSVFileCreator
 					csv.WriteField("Leverandørnr");
 					csv.WriteField("DB nr.");
 					csv.WriteField("Varetekst 1");
-					for (int i = 0; i < changes.Max(x => x.DGNBQualityStep.Count); i++)
-					{
-						csv.WriteField("DGNB Kvalitetstrin");
-					}
+					//for (int i = 0; i < changes.Max(x => x.DGNBQualityStep.Count); i++)
+					//{
+					csv.WriteField("DGNB Kvalitetstrin");
+					//}
 					csv.WriteField("Svanemærke");
 					csv.WriteField("Svanemærket byggeri");
 					csv.WriteField("BREEAM");
@@ -52,18 +52,22 @@ public sealed class CSVFileCreator : ICSVFileCreator
 						csv.WriteField(change.SupplierNr);
 						csv.WriteField(Convert.ToInt32(change.DBNr));
 						csv.WriteField(change.ProductText);
-						for (int i = 0; i < changes.Max(x => x.DGNBQualityStep.Count); i++)
+						//for (int i = 0; i < changes.Max(x => x.DGNBQualityStep.Count); i++)
+						//{
+						//if (i < change.DGNBQualityStep?.ToList().Count)
+						//{
+						string? currentField = new(change.DGNBQualityStep.ToList().FirstOrDefault());
+						foreach (var item in change.DGNBQualityStep.ToList())
 						{
-							if (i < change.DGNBQualityStep?.ToList().Count)
-							{
-								string? currentField = change.DGNBQualityStep?.ToList()[i];
-								csv.WriteField("\"" + currentField + "\"");
-							}
-							else
-							{
-								csv.WriteField("");
-							}
-						}
+							currentField += "," + item;
+						};
+						csv.WriteField("\"" + currentField + "\"");
+						//}
+						//else
+						//{
+						//	csv.WriteField("");
+						//}
+						//}
 						csv.WriteField(Convert.ToInt32(change.hasSvanemærke));
 						csv.WriteField(Convert.ToInt32(change.hasSvanemærkeByggeri));
 						csv.WriteField(Convert.ToInt32(change.hasBREEAM));
