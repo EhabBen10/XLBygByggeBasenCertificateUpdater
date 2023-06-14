@@ -7,7 +7,7 @@ using CertificateUpdater.Services.Services;
 using CertificateUpdater.Services.Settings;
 using Microsoft.Extensions.Options;
 
-string basePath = "C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Documents\\Byggebasen\\AWSSimulator\\";
+string basePath = "O:\\IT\\EG-FIT fællesdrev\\Dokumentation\\Intern\\Varevedligehold\\Bæredygtige varer\\Byg-e udtræk\\AWSSimulator\\";
 IDateTimeProvider dateTimeProvider = new DateTimeProvider();
 ILogProvider logProvider = new LocalFileLogProvider(basePath + "RunLog.txt", dateTimeProvider);
 ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "TunUserNr.txt", basePath + "UserName.txt",
@@ -43,5 +43,5 @@ if (productResult.IsFailure)
 }
 var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult.Value);
 cSVFileCreator.CreateCSVFiles(certificationResult.ToList());
-logProvider.UpdateLog();
+//logProvider.UpdateLog();
 Console.WriteLine("end");

@@ -6,7 +6,7 @@ public sealed record CertificationChange
 	public string SupplierNr { get; set; } = string.Empty;
 	public int DBNr { get; set; }
 	public string ProductText { get; set; } = string.Empty;
-	public bool hasDGNB { get; set; }
+	public ICollection<string> DGNBQualityStep { get; set; } = new List<string>();
 	public bool hasSvanemærke { get; set; }
 	public bool hasSvanemærkeByggeri { get; set; }
 	public bool hasBREEAM { get; set; }
@@ -16,7 +16,6 @@ public sealed record CertificationChange
 	public bool hasFSC { get; set; }
 	public bool hasPEFC { get; set; }
 	public bool hasIndeKlima { get; set; }
-	public bool hasEUBlomst { get; set; }
 	public bool hasAstmaOgAllergi { get; set; }
 	public bool hasEPD { get; set; }
 	public bool hasALUK { get; set; }

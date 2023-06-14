@@ -35,6 +35,22 @@ internal static class getProduktBatchResponseToProducts
 					Tunnr = katalog.Tunnr,
 				});
 			}
+			ICollection<DGNBDocument> documents = new List<DGNBDocument>();
+			foreach (var document in response.DGNBDocuments)
+			{
+				documents.Add(new()
+				{
+					IndicatorNumber = document.IndicatorNumber,
+					IndicatorStep = document.IndicatorStep,
+				});
+			}
+			foreach (var document in documents)
+			{
+				if (!result.dGNBDocuments.Any(x => x.IndicatorNumber == document.IndicatorNumber))
+				{
+					result.dGNBDocuments.Add(document);
+				}
+			}
 			results.Add(result);
 		}
 		return results;
