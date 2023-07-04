@@ -9,17 +9,18 @@ public class DateTimeProvider : IDateTimeProvider
 		return DateTime.Now;
 	}
 
-	public DateTime GetNowMinus1Hour()
-	{
-		return DateTime.Now.AddHours(-1);
-	}
-
 	public string GetNowShortFormat()
 	{
 		return DateTime.Now.ToShortDateString();
 	}
+
+	public DateTime ParseToDateTime(string dateString, string format)
+	{
+		return DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+	}
+
 	public string ParseToUnix(string dateString, string format)
 	{
-		return Convert.ToString(((DateTimeOffset)DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)).ToUnixTimeMilliseconds());
+		return Convert.ToString(((DateTimeOffset)DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)).AddDays(-1).ToUnixTimeMilliseconds());
 	}
 }

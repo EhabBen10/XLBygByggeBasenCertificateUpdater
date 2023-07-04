@@ -24,12 +24,12 @@ IClient<BaseSettings> client = new RestSharpClient<BaseSettings>(byggeBasenSetti
 IRelevantTunnrFinder relevantTunnrFinder = new RelevantTunnrFinder();
 ICertificationChangeFinder certificationChangeFinder = new CertificationChangeFinder();
 
-
 IGetKatalogChangesService getKatalogChangesService = new GetKatalogChangesService(client, logProvider, credentialProvider);
 IGetProductBatchService getProductBatchService = new GetProductBatchService(client, credentialProvider);
 ICSVFileCreator cSVFileCreator = new CSVFileCreator();
+ICsvToXlsxConverter csvToXlsxConverter = new CsvToXlsxConverter();
 //IPostChangesService postChangesService = new PostChangesService(client, credentialProvider);
-Console.WriteLine("(1/6) Getting all changes to product katalogs");
+Console.WriteLine("(1/7) Getting all changes to product katalogs");
 var catChangesResult = await getKatalogChangesService.GetKatalogChanges(default);
 if (catChangesResult.IsFailure)
 {
@@ -38,9 +38,9 @@ if (catChangesResult.IsFailure)
 	return;
 }
 
-Console.WriteLine("(2/6) Finding relevant changes to product katalogs");
+Console.WriteLine("(2/7) Finding relevant changes to product katalogs");
 var tunnr = relevantTunnrFinder.FindRelevantTunnrs(catChangesResult.Value);
-Console.WriteLine("(3/6) Getting all changed products");
+Console.WriteLine("(3/7) Getting all changed products");
 var productResult = await getProductBatchService.GetProductBatch(tunnr, default);
 if (productResult.IsFailure)
 {
@@ -48,18 +48,20 @@ if (productResult.IsFailure)
 	Thread.Sleep(10000);
 	return;
 }
-Console.WriteLine("(4/6) Finding changes to certification");
+Console.WriteLine("(4/7) Finding changes to certification");
 var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult.Value);
-Console.WriteLine("(5/6) Creating Csv File");
+Console.WriteLine("(5/7) Creating Csv File");
 var csvResult = cSVFileCreator.CreateCSVFiles(certificationResult.ToList());
 if (csvResult.IsFailure)
 {
 	Console.WriteLine(csvResult.Error.Message);
 	Thread.Sleep(20000);
 	return;
-
 }
-Console.WriteLine("(6/6) Updating RunLog");
+csvToXlsxConverter.ConvertToXlsx(csvResult.Value);
+Console.WriteLine("(7/7) Updating RunLog");
 logProvider.UpdateLog();
 Console.WriteLine("End");
+Thread.Sleep(10000);
+
 

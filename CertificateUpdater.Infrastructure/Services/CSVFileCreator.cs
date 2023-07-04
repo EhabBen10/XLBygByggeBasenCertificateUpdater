@@ -9,13 +9,12 @@ namespace CertificateUpdater.Services.Services;
 
 public sealed class CSVFileCreator : ICSVFileCreator
 {
-	public Result CreateCSVFiles(List<CertificationChange> changes)
+	public Result<string> CreateCSVFiles(List<CertificationChange> changes)
 	{
 		string file = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".csv";
 		if (File.Exists(file))
 		{
-			return Result.Failure(new Error("File already exists", "An error occured because this program has already been run today, please check if the existing csv file contains what you need, " +
-				"if not delete it and the entry in the run log corresponding to today"));
+			File.Delete(file);
 		}
 
 		try
@@ -61,10 +60,17 @@ public sealed class CSVFileCreator : ICSVFileCreator
 						//{
 						//if (i < change.DGNBQualityStep?.ToList().Count)
 						//{
-						string? currentField = new(change.DGNBQualityStep.ToList().FirstOrDefault());
+						string? currentField = "";
 						foreach (var item in change.DGNBQualityStep.ToList())
 						{
-							currentField += "," + item;
+							if (item == change.DGNBQualityStep.ToList().FirstOrDefault())
+							{
+								currentField = change.DGNBQualityStep.ToList().FirstOrDefault();
+							}
+							else
+							{
+								currentField += "," + item;
+							}
 						};
 						csv.WriteField("\"" + currentField + "\"");
 						//}
@@ -90,11 +96,11 @@ public sealed class CSVFileCreator : ICSVFileCreator
 				}
 			}
 
-			return Result.Success();
+			return Result.Success(file);
 		}
 		catch (Exception)
 		{
-			return Result.Failure(Error.NullValue);
+			return Result.Failure<string>(Error.NullValue);
 		}
 	}
 }

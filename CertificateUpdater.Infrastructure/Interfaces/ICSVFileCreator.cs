@@ -4,5 +4,5 @@ using CertificateUpdater.Domain.Shared;
 namespace CertificateUpdater.Services.Interfaces;
 public interface ICSVFileCreator
 {
-	public Result CreateCSVFiles(List<CertificationChange> changes);
+	public Result<string> CreateCSVFiles(List<CertificationChange> changes);
 }
