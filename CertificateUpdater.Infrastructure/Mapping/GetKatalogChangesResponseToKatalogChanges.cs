@@ -16,7 +16,7 @@ internal static class GetKatalogChangesResponseToKatalogChanges
 		{
 			if (response is null)
 			{
-				throw new ArgumentNullException(nameof(response));
+				throw new ArgumentNullException(nameof(responses));
 			}
 
 			CatChange result = new()

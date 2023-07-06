@@ -16,7 +16,7 @@ internal static class getProduktBatchResponseToProducts
 		{
 			if (response is null || response.SupplierNr is null)
 			{
-				throw new ArgumentNullException(nameof(response));
+				throw new ArgumentNullException(nameof(responses));
 			}
 			Product result = new()
 			{

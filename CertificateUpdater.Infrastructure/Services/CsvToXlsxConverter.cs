@@ -8,7 +8,7 @@ public sealed class CsvToXlsxConverter : ICsvToXlsxConverter
 	{
 		string file = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
 		ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-		using (ExcelPackage package = new ExcelPackage())
+		using (ExcelPackage package = new())
 		{
 			// Create a new worksheet
 			ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");

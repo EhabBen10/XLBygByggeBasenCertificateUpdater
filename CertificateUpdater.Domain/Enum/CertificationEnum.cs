@@ -4,7 +4,6 @@ public enum CertificationEnum
 	EPD = 24,
 	IndeKlima = 30,
 	FSC = 32,
-	SvanemærkeEUBlomse = 34,
 	DGNB = 36,
 	Svanemærke = 37,
 	Cradle2Cradle = 38,

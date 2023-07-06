@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{70707F2E-8EE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED8E0627-A5FF-4458-9E26-935EB44F6FEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CertificateUpde.Services.Test", "CertificateUpde.Services.Test\CertificateUpde.Services.Test.csproj", "{AF0E574C-EC24-4E58-AA85-37D4A1806BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CertificateUpdater.Services.Test", "CertificateUpde.Services.Test\CertificateUpdater.Services.Test.csproj", "{AF0E574C-EC24-4E58-AA85-37D4A1806BC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
