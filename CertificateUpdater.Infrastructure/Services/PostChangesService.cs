@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using CertificateUpdater.Domain.Entities;
 using CertificateUpdater.Domain.RequestBodies;
+using CertificateUpdater.Domain.Shared;
 using CertificateUpdater.Services.Interfaces;
 using CertificateUpdater.Services.Responses.PostChanges;
 using CertificateUpdater.Services.Settings;
@@ -23,12 +24,13 @@ public sealed class PostChangesService : IPostChangesService
 		CredentialProvider = credentialProvider ?? throw new ArgumentNullException(nameof(credentialProvider));
 	}
 
-	public async Task PostChangeBatch(ICollection<CertificationChange> changes, CancellationToken cancellationToken)
+	public async Task<Result> PostChangeBatch(ICollection<CertificationChange> changes, CancellationToken cancellationToken)
 	{
 		var request = new RestRequest("http://ditas02:1043/xzu_a4ws/rest/v1/query/XZU_DB_update/POST");
+		List<CertificationChange> certificationChanges = changes.ToList();
 		var requestBody = new PostChangeBatchBody
 		{
-			Changes = changes,
+			Changes = certificationChanges
 		};
 
 		string xml;
@@ -43,5 +45,6 @@ public sealed class PostChangesService : IPostChangesService
 		request.AddParameter("application/xml", xml, ParameterType.RequestBody);
 		request.Authenticator = new HttpBasicAuthenticator(CredentialProvider.GetAspect4Username(), CredentialProvider.GetAspect4Password());
 		var response = await RestClient.PostAsync<PostChangesResponse>(request, cancellationToken);
+		return Result.Success();
 	}
 }

@@ -16,7 +16,7 @@ internal static class getProduktBatchResponseToProducts
 		{
 			if (response is null || response.SupplierNr is null)
 			{
-				throw new ArgumentNullException(nameof(response));
+				throw new ArgumentNullException(nameof(responses));
 			}
 			Product result = new()
 			{
@@ -34,6 +34,22 @@ internal static class getProduktBatchResponseToProducts
 					EmneId = katalog.EmneId,
 					Tunnr = katalog.Tunnr,
 				});
+			}
+			ICollection<DGNBDocument> documents = new List<DGNBDocument>();
+			foreach (var document in response.DGNBDocuments)
+			{
+				documents.Add(new()
+				{
+					IndicatorNumber = document.IndicatorNumber,
+					IndicatorStep = document.IndicatorStep,
+				});
+			}
+			foreach (var document in documents)
+			{
+				if (!result.dGNBDocuments.Any(x => x.IndicatorNumber == document.IndicatorNumber))
+				{
+					result.dGNBDocuments.Add(document);
+				}
 			}
 			results.Add(result);
 		}

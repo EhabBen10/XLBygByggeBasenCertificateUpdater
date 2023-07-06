@@ -7,6 +7,9 @@ internal sealed record ResultData
 	[JsonPropertyName("KatalogData")]
 	public ICollection<KatalogData> KatalogData { get; set; } = new List<KatalogData>();
 
+	[JsonPropertyName("DGNBDocuments")]
+	public ICollection<DGNBDocumentData> DGNBDocuments { get; set; } = new List<DGNBDocumentData>();
+
 	[JsonPropertyName("LEVERANDORNAVN")]
 	public string CompanyName { get; set; } = string.Empty;
 

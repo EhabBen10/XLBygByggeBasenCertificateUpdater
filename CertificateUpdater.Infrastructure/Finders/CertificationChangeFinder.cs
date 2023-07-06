@@ -22,9 +22,6 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 			{
 				switch (katalog.EmneId)
 				{
-					case (int)CertificationEnum.DGNB:
-						certificationChange.hasDGNB = katalog.isValid;
-						break;
 					case (int)CertificationEnum.Svanemærke:
 						certificationChange.hasSvanemærke = katalog.isValid;
 						break;
@@ -49,9 +46,6 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 					case (int)CertificationEnum.IndeKlima:
 						certificationChange.hasIndeKlima = katalog.isValid;
 						break;
-					case (int)CertificationEnum.SvanemærkeEUBlomse:
-						certificationChange.hasEUBlomst = katalog.isValid;
-						break;
 					case (int)CertificationEnum.AstmaOgAllergi:
 						certificationChange.hasAstmaOgAllergi = katalog.isValid;
 						break;
@@ -68,9 +62,12 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 						break;
 				}
 			}
+			foreach (var dgnbDocument in product.dGNBDocuments)
+			{
+				certificationChange.DGNBQualityStep.Add(Convert.ToString(dgnbDocument.IndicatorNumber) + ":" + Convert.ToString(dgnbDocument.IndicatorStep));
+			}
 			certificationChanges.Add(certificationChange);
 		}
 		return certificationChanges;
 	}
-
 }
