@@ -10,6 +10,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 	private readonly string _testCompanyName = "testCompanyName";
 	private readonly int _testDBNr = 12;
 	private readonly string _testProductText1 = "testProductText";
+	private readonly int _testVareGruppeId = 1234;
 	private readonly ICollection<DGNBDocumentData> _testDGNBDocumentData = new List<DGNBDocumentData>();
 	private readonly ICollection<KatalogData> _testKatalogData = new List<KatalogData>();
 
@@ -27,16 +28,41 @@ public sealed class getProductBatchResponseToProductsUnitTest
 	}
 
 	[Fact]
-	public void ToProducts_ResultDataNull_ArgumentNullExceptionThrown()
+	public void ToProducts_ResponseIsNull_ArgumentNullExceptionThrown()
 	{
 		// Arrange
-		_getProductBatchResponse.Result.ResultData.Add(null!);
+		_getProductBatchResponse.Result.ResultData = new List<ResultData>() { null! };
 
 		// Act
 		var result = Record.Exception(_getProductBatchResponse.ToProducts);
 
 		//Assert
 		Assert.IsType<ArgumentNullException>(result);
+	}
+
+	[Fact]
+	public void ToProducts_ResultNull_EmptyProductListReturned()
+	{
+		// Arrange
+		_getProductBatchResponse.Result = null!;
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		//Assert
+		Assert.Empty(result);
+	}
+	[Fact]
+	public void ToProducts_ResultDataNull_EmptyProductListReturned()
+	{
+		// Arrange
+		_getProductBatchResponse.Result.ResultData = null!;
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		//Assert
+		Assert.Empty(result);
 	}
 
 	[Fact]
@@ -82,6 +108,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 			ProductText1 = _testProductText1,
 			DGNBDocuments = _testDGNBDocumentData,
 			KatalogData = _testKatalogData,
+			ProductGroupId = _testVareGruppeId
 		});
 
 		// Act
@@ -94,6 +121,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		Assert.Equal(_testProductText1, result.First().ProductText);
 		Assert.Equal(_testSupplierNr, result.First().SupplierNr);
 		Assert.Equal(_testCompanyName, result.First().CompanyName);
+		Assert.Equal(_testVareGruppeId, result.First().ProductGroupId);
 	}
 
 	[Fact]

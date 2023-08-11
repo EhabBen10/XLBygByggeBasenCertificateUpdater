@@ -15,7 +15,8 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 				CompanyName = product.CompanyName,
 				DBNr = product.DBNr,
 				ProductText = product.ProductText,
-				SupplierNr = product.SupplierNr
+				SupplierNr = product.SupplierNr,
+				ProductGroupId = product.ProductGroupId,
 			};
 
 			foreach (var katalog in product.KatalogData)

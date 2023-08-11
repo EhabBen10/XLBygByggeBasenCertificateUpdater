@@ -30,6 +30,7 @@ public sealed class CSVFileCreator : ICSVFileCreator
 				csv.WriteField("Firmanavn");
 				csv.WriteField("Leverandørnr");
 				csv.WriteField("DB nr.");
+				csv.WriteField("Varegruppe id");
 				csv.WriteField("Varetekst 1");
 				csv.WriteField("DGNB Kvalitetstrin");
 				csv.WriteField("Svanemærke");
@@ -50,7 +51,8 @@ public sealed class CSVFileCreator : ICSVFileCreator
 				{
 					csv.WriteField(change.CompanyName);
 					csv.WriteField(change.SupplierNr);
-					csv.WriteField(Convert.ToInt32(change.DBNr));
+					csv.WriteField(change.DBNr);
+					csv.WriteField(change.ProductGroupId);
 					csv.WriteField(change.ProductText);
 					string? currentField = "";
 					foreach (var item in change.DGNBQualityStep.ToList())

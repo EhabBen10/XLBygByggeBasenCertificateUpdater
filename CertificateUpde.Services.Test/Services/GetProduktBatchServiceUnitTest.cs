@@ -25,6 +25,7 @@ public sealed class GetProduktBatchServiceUnitTest
 	private readonly string _testSupplierNr = "testSupplierNr";
 	private readonly string _testCompanyName = "testCompanyName";
 	private readonly int _testDBNr = 12;
+	private readonly int _testVaregruppeId = 1352;
 	private readonly string _testProductText1 = "testProductText";
 	private readonly ICollection<DGNBDocument> _testDGNBDocument = new List<DGNBDocument>();
 	private readonly ICollection<Katalog> _testKatalog = new List<Katalog>();
@@ -88,6 +89,8 @@ public sealed class GetProduktBatchServiceUnitTest
 		_credentialProviderMock
 			.Verify(x => x.GetTunUserNr(), Times.Once());
 	}
+
+
 
 	[Fact]
 	public async void GetProductBatch_TunnrsIsBelow1000ClientReturnsFailure_NullValueErrorIsReturned()
@@ -227,6 +230,7 @@ public sealed class GetProduktBatchServiceUnitTest
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
+				ProductGroupId= _testVaregruppeId
 			}
 		};
 		ICollection<Product> expectedResult = new List<Product>()
@@ -239,6 +243,7 @@ public sealed class GetProduktBatchServiceUnitTest
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
+				ProductGroupId= _testVaregruppeId
 			},
 			new()
 			{
@@ -248,6 +253,7 @@ public sealed class GetProduktBatchServiceUnitTest
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
+				ProductGroupId= _testVaregruppeId
 			}
 		};
 
@@ -317,6 +323,7 @@ public sealed class GetProduktBatchServiceUnitTest
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
+				ProductGroupId= _testVaregruppeId
 			}
 		};
 		_responseMock

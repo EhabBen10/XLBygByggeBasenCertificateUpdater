@@ -7,4 +7,5 @@ public sealed record Product
 	public string SupplierNr { get; set; } = string.Empty;
 	public int DBNr { get; set; }
 	public string ProductText { get; set; } = string.Empty;
+	public int ProductGroupId { get; set; }
 }

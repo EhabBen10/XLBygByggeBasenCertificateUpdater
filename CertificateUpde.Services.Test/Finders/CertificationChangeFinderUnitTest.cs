@@ -12,6 +12,8 @@ public sealed class CertificationChangeFinderUnitTest
 	private readonly string _testCompanyName = "testCompanyName";
 	private readonly string _testProductText = "testProductText";
 	private readonly string _testSupplierNr = "testSupplierNr";
+	private readonly int _testDBNr = 4;
+	private readonly int _testVareGruppeId = 1234;
 
 	[Fact]
 	public void FindCertificationChanges_ProductsNull_ExceptionsIsThrown()
@@ -46,9 +48,10 @@ public sealed class CertificationChangeFinderUnitTest
 			new Product()
 			{
 				CompanyName = _testCompanyName,
-				DBNr = 1,
+				DBNr = _testDBNr,
 				ProductText= _testProductText,
 				SupplierNr=_testSupplierNr,
+				ProductGroupId=_testVareGruppeId
 			}
 		};
 
@@ -60,6 +63,8 @@ public sealed class CertificationChangeFinderUnitTest
 		Assert.Equal(_testCompanyName, result.First().CompanyName);
 		Assert.Equal(_testProductText, result.First().ProductText);
 		Assert.Equal(_testSupplierNr, result.First().SupplierNr);
+		Assert.Equal(_testDBNr, result.First().DBNr);
+		Assert.Equal(_testVareGruppeId, result.First().ProductGroupId);
 	}
 
 	[Fact]

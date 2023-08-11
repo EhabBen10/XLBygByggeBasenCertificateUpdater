@@ -21,4 +21,7 @@ internal sealed record ResultData
 
 	[JsonPropertyName("VARETEKST1")]
 	public string ProductText1 { get; set; } = string.Empty;
+
+	[JsonPropertyName("VAREGRUPPEID")]
+	public int ProductGroupId { get; set; }
 }
