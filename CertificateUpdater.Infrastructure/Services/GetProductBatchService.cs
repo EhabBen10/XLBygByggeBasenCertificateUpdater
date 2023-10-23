@@ -32,7 +32,7 @@ public sealed class GetProductBatchService : IGetProductBatchService
 		Result<ICollection<Product>> allChanges = new List<Product>();
 		if (tunnrs.IsNullOrEmpty())
 		{
-			return Result.Failure<ICollection<Product>>(Error.NullValue);
+			return Result.Failure<ICollection<Product>>(new Error("Null value", "No new updates"));
 		}
 		if (tunnrs.Count < 1000)
 		{

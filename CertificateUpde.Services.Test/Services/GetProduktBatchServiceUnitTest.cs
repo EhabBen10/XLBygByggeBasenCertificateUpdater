@@ -62,7 +62,7 @@ public sealed class GetProduktBatchServiceUnitTest
 	}
 
 	[Fact]
-	public async void GetProductBatch_TunnrsIsEmpty_NullValueErrorIsReturned()
+	public async void GetProductBatch_TunnrsIsEmpty_ErrorIsReturned()
 	{
 		// Arrange
 		_credentialProviderMock
@@ -80,7 +80,7 @@ public sealed class GetProduktBatchServiceUnitTest
 		// Assert 
 		Assert.True(result.IsFailure);
 		Assert.False(result.IsSuccess);
-		Assert.Equal(Error.NullValue, result.Error);
+		Assert.Equal("Null value", result.Error.Code);
 
 		_credentialProviderMock
 			.Verify(x => x.GetUserName(), Times.Once());
@@ -89,8 +89,6 @@ public sealed class GetProduktBatchServiceUnitTest
 		_credentialProviderMock
 			.Verify(x => x.GetTunUserNr(), Times.Once());
 	}
-
-
 
 	[Fact]
 	public async void GetProductBatch_TunnrsIsBelow1000ClientReturnsFailure_NullValueErrorIsReturned()

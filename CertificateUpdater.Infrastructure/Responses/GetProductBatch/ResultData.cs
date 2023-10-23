@@ -10,6 +10,9 @@ internal sealed record ResultData
 	[JsonPropertyName("DGNBDocuments")]
 	public ICollection<DGNBDocumentData> DGNBDocuments { get; set; } = new List<DGNBDocumentData>();
 
+	[JsonPropertyName("EPDs")]
+	public ICollection<EPDData>? EPDDatas { get; set; }
+
 	[JsonPropertyName("LEVERANDORNAVN")]
 	public string CompanyName { get; set; } = string.Empty;
 

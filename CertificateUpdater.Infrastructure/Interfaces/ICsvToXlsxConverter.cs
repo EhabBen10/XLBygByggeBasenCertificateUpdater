@@ -1,5 +1,5 @@
 ﻿namespace CertificateUpdater.Services.Interfaces;
 public interface ICsvToXlsxConverter
 {
-	void ConvertToXlsx(string csvFilePath);
+	void ConvertToXlsx(ICollection<string> csvFilePath);
 }

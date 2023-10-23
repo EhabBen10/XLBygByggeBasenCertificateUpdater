@@ -20,4 +20,5 @@ public sealed record CertificationChange
 	public bool hasAstmaOgAllergi { get; set; }
 	public bool hasEPD { get; set; }
 	public bool hasALUK { get; set; }
+	public List<EPD> ePDs { get; set; } = new();
 }
