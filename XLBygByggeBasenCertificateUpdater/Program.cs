@@ -23,7 +23,6 @@ IOptions<BaseSettings> byggeBasenSettings = Options.Create(settings);
 IClient<BaseSettings> client = new RestSharpClient<BaseSettings>(byggeBasenSettings);
 IRelevantTunnrFinder relevantTunnrFinder = new RelevantTunnrFinder();
 ICertificationChangeFinder certificationChangeFinder = new CertificationChangeFinder();
-
 IGetKatalogChangesService getKatalogChangesService = new GetKatalogChangesService(client, logProvider, credentialProvider);
 IGetProductBatchService getProductBatchService = new GetProductBatchService(client, credentialProvider);
 ICSVFileCreator cSVFileCreator = new CSVFileCreator();
