@@ -22,16 +22,19 @@ internal sealed record EPDData
 	public string FunctionalUnit { get; set; } = string.Empty;
 
 	[JsonPropertyName("FunctionalUnitAmount")]
-	public int FunctionalUnitAmount { get; set; }
+	public int? FunctionalUnitAmount { get; set; }
 
+	[JsonConverter(typeof(CustomBooleanConverter))]
 	[JsonPropertyName("ISO14025Certified")]
-	public bool ISO14025Certified { get; set; }
+	public bool? ISO14025Certified { get; set; } = false;
 
+	[JsonConverter(typeof(CustomBooleanConverter))]
 	[JsonPropertyName("ISO14040Certified")]
-	public bool ISO14040Certified { get; set; }
+	public bool? ISO14040Certified { get; set; } = false;
 
+	[JsonConverter(typeof(CustomBooleanConverter))]
 	[JsonPropertyName("ISO14044Certified")]
-	public bool ISO14044Certified { get; set; }
+	public bool? ISO14044Certified { get; set; } = false;
 
 	[JsonPropertyName("PdfAppxDate")]
 	public string? PdfAppxDate { get; set; }
