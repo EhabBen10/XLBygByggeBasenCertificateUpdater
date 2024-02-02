@@ -27,4 +27,28 @@ internal sealed record ResultData
 
 	[JsonPropertyName("VAREGRUPPEID")]
 	public int ProductGroupId { get; set; }
+
+	[JsonPropertyName("HasHazardousGoods")]
+	public bool? HasHazardousGoods { get; set; }
+
+	[JsonPropertyName("HazardClass")]
+	public string? HazardClass { get; set; }
+
+	[JsonPropertyName("HazardMark")]
+	public string? HazardMark { get; set; }
+
+	[JsonPropertyName("Product_HazardSentences")]
+	public ICollection<ProductHazardSentenceData>? ProductHazardSentencesData { get; set; }
+
+	[JsonPropertyName("Product_HazardSymbols")]
+	public ICollection<ProductHazardSymbolData>? ProductHazardSymbolsData { get; set; }
+
+	[JsonPropertyName("Product_SafetySentences")]
+	public ICollection<ProductSafetySentenceData>? ProductSafetySentencesData { get; set; }
+
+	[JsonPropertyName("ShippingDesignation")]
+	public string? ShippingDesignation { get; set; }
+
+	[JsonPropertyName("UNCode")]
+	public string? UNCode { get; set; }
 }

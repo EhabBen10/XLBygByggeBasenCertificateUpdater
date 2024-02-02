@@ -50,8 +50,59 @@ internal static class getProduktBatchResponseToProducts
 				SupplierNr = response.SupplierNr,
 				DBNr = response.DBNr,
 				CompanyName = response.CompanyName,
-				ProductGroupId = response.ProductGroupId
+				ProductGroupId = response.ProductGroupId,
 			};
+			if (!response.HazardMark.IsNullOrEmpty())
+			{
+				result.HazardInfo = new()
+				{
+					HasHazardousGoods = response.HasHazardousGoods,
+					HazardMark = response.HazardMark,
+					HazardClass = response.HazardClass,
+					ShippingDesignation = response.ShippingDesignation,
+					UNCode = response.UNCode,
+				};
+				if (response?.ProductHazardSentencesData != null)
+				{
+					foreach (var item in response.ProductHazardSentencesData)
+					{
+						result.HazardInfo.ProductHazardSentences.Add(new()
+						{
+							AjourDate = item.AjourDate,
+							AjourId = item.AjourId,
+							AjourUser = item.AjourUser,
+							Sentence = item.Sentence,
+							SentenceCode = item.SentenceCode
+						});
+					}
+				}
+				if (response?.ProductSafetySentencesData != null)
+				{
+					foreach (var item in response.ProductSafetySentencesData)
+					{
+						result.HazardInfo.ProductSafetySentences.Add(new()
+						{
+							AjourDate = item.AjourDate,
+							AjourId = item.AjourId,
+							AjourUser = item.AjourUser,
+							Sentence = item.Sentence,
+							SentenceCode = item.SentenceCode
+						});
+					}
+				}
+				if (response?.ProductHazardSymbolsData != null)
+				{
+					foreach (var item in response.ProductHazardSymbolsData)
+					{
+						result.HazardInfo.ProductHazardSymbols.Add(new()
+						{
+							SymDesc = item.SymDesc,
+							SymImgUrl = item.SymImgUrl,
+							SymName = item.SymName
+						});
+					}
+				}
+			}
 			foreach (var character in problematicCharacters)
 			{
 				result.ProductText = result.ProductText.Replace(character.ToString(), string.Empty);
@@ -68,6 +119,7 @@ internal static class getProduktBatchResponseToProducts
 					Tunnr = katalog.Tunnr,
 				});
 			}
+
 			ICollection<DGNBDocument> documents = new List<DGNBDocument>();
 			foreach (var document in response.DGNBDocuments)
 			{
@@ -79,9 +131,9 @@ internal static class getProduktBatchResponseToProducts
 			}
 			foreach (var document in documents)
 			{
-				if (!result.dGNBDocuments.Any(x => x.IndicatorNumber == document.IndicatorNumber))
+				if (!result.DGNBDocuments.Any(x => x.IndicatorNumber == document.IndicatorNumber))
 				{
-					result.dGNBDocuments.Add(document);
+					result.DGNBDocuments.Add(document);
 				}
 			}
 			if (!response.EPDDatas.IsNullOrEmpty())
@@ -109,7 +161,7 @@ internal static class getProduktBatchResponseToProducts
 					{
 						ConversionFactor = ePDData.ConversionFactor,
 						CreationDate = creationDateTime,
-						EN15084ACertification = ePDData.EN15804ACertification,
+						EN15084ACertification = ePDData.EN15804ACertification?.ToString(),
 						EPDType = ePDData.EPDType,
 						FunctionalUnit = ePDData.FunctionalUnit,
 						FunctionalUnitAmount = ePDData.FunctionalUnitAmount,
@@ -126,34 +178,34 @@ internal static class getProduktBatchResponseToProducts
 						ValidTo = ePDData.ValidTo?.UnixTimestampWithOffsetToDateTime(),
 						EPDIndicatorLines = new()
 						{
-							A1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A1,
-							A2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A2,
-							A3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A3,
-							A4 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A4,
-							A5 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A5,
-							A1A3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A1A3,
-							B1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B1,
-							B2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B2,
-							B3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B3,
-							B4 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B4,
-							B5 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B5,
-							B6 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B6,
-							B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B7,
-							B1B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B1B7,
-							B1C1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B1C1,
-							B2B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B2B7,
-							B3B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B3B7,
-							C1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C1,
-							C2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C2,
-							C3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C3,
-							C3_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C3_1,
-							C3_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C3_2,
-							C4 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C4,
-							C4_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C4_1,
-							C4_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C4_2,
-							D = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D,
-							D_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D_1,
-							D_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D_2,
+							A1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A1 ?? 0,
+							A2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A2 ?? 0,
+							A3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A3 ?? 0,
+							A4 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A4 ?? 0,
+							A5 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A5 ?? 0,
+							A1A3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A1A3 ?? 0,
+							B1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B1 ?? 0,
+							B2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B2 ?? 0,
+							B3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B3 ?? 0,
+							B4 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B4 ?? 0,
+							B5 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B5 ?? 0,
+							B6 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B6 ?? 0,
+							B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B7 ?? 0,
+							B1B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B1B7 ?? 0,
+							B1C1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B1C1 ?? 0,
+							B2B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B2B7 ?? 0,
+							B3B7 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.B3B7 ?? 0,
+							C1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C1 ?? 0,
+							C2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C2 ?? 0,
+							C3 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C3 ?? 0,
+							C3_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C3_1 ?? 0,
+							C3_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C3_2 ?? 0,
+							C4 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C4 ?? 0,
+							C4_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C4_1 ?? 0,
+							C4_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.C4_2 ?? 0,
+							D = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D ?? 0,
+							D_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D_1 ?? 0,
+							D_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D_2 ?? 0,
 							EPDHeaderId = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.EPDHeaderId,
 							Id = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.Id,
 							Indicator = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.Indicator,

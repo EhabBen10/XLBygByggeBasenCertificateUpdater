@@ -224,7 +224,7 @@ public sealed class GetProduktBatchServiceUnitTest
 			{
 				CompanyName = _testCompanyName,
 				DBNr = _testDBNr,
-				dGNBDocuments=_testDGNBDocument,
+				DGNBDocuments=_testDGNBDocument,
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
@@ -237,7 +237,7 @@ public sealed class GetProduktBatchServiceUnitTest
 			{
 				CompanyName = _testCompanyName,
 				DBNr = _testDBNr,
-				dGNBDocuments=_testDGNBDocument,
+				DGNBDocuments=_testDGNBDocument,
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
@@ -247,7 +247,7 @@ public sealed class GetProduktBatchServiceUnitTest
 			{
 				CompanyName = _testCompanyName,
 				DBNr = _testDBNr,
-				dGNBDocuments=_testDGNBDocument,
+				DGNBDocuments=_testDGNBDocument,
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,
@@ -317,7 +317,7 @@ public sealed class GetProduktBatchServiceUnitTest
 			{
 				CompanyName = _testCompanyName,
 				DBNr = _testDBNr,
-				dGNBDocuments=_testDGNBDocument,
+				DGNBDocuments=_testDGNBDocument,
 				KatalogData= _testKatalog,
 				ProductText=_testProductText1,
 				SupplierNr=_testSupplierNr,

@@ -116,7 +116,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		var result = _getProductBatchResponse.ToProducts();
 
 		//Assert
-		Assert.NotEmpty(result.First().dGNBDocuments);
+		Assert.NotEmpty(result.First().DGNBDocuments);
 		Assert.NotEmpty(result.First().KatalogData);
 		Assert.Equal(_testDBNr, result.First().DBNr);
 		Assert.Equal(_testProductText1, result.First().ProductText);
@@ -153,7 +153,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		var result = _getProductBatchResponse.ToProducts();
 
 		//Assert
-		Assert.Single(result.First().dGNBDocuments);
+		Assert.Single(result.First().DGNBDocuments);
 	}
 
 	[Fact]
@@ -184,7 +184,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		var result = _getProductBatchResponse.ToProducts();
 
 		//Assert
-		Assert.Equal(2, result.First().dGNBDocuments.Count);
+		Assert.Equal(2, result.First().DGNBDocuments.Count);
 	}
 
 	[Fact]
@@ -192,9 +192,9 @@ public sealed class getProductBatchResponseToProductsUnitTest
 	{
 		// Arrange
 		string pdfId = "testPdfId";
-		double conversionFactor = 123;
+		decimal conversionFactor = 123;
 		string creationDate = "/Date(1687989600000+0200)/";
-		int eN15084ACertification = 123;
+		string eN15084ACertification = "123";
 		int ePDType = 8;
 		string functionalUnit = "testFunctionalUnit";
 		int functionalUnitAmount = 4;
@@ -240,7 +240,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		{
 			ConversionFactor = conversionFactor,
 			CreationDate = creationDate,
-			EN15804ACertification = eN15084ACertification,
+			EN15804ACertification = Convert.ToInt32(eN15084ACertification),
 			EPDType = ePDType,
 			FunctionalUnit = functionalUnit,
 			FunctionalUnitAmount = functionalUnitAmount,
@@ -310,9 +310,9 @@ public sealed class getProductBatchResponseToProductsUnitTest
 	{
 		// Arrange
 		string pdfId = "testPdfId";
-		double conversionFactor = 123;
+		decimal conversionFactor = 123;
 		string creationDate = "/Date(1687989600000+0200)/";
-		int eN15084ACertification = 123;
+		string eN15084ACertification = "123";
 		int ePDType = 8;
 		string functionalUnit = "testFunctionalUnit";
 		int functionalUnitAmount = 4;
@@ -362,7 +362,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		{
 			ConversionFactor = conversionFactor,
 			CreationDate = creationDate,
-			EN15804ACertification = eN15084ACertification,
+			EN15804ACertification = Convert.ToInt32(eN15084ACertification),
 			EPDType = ePDType,
 			FunctionalUnit = functionalUnit,
 			FunctionalUnitAmount = functionalUnitAmount,

@@ -75,7 +75,7 @@ public sealed class CertificationChangeFinderUnitTest
 		{
 			new Product()
 			{
-				dGNBDocuments= new List<DGNBDocument>()
+				DGNBDocuments= new List<DGNBDocument>()
 				{
 					new()
 					{
@@ -242,9 +242,9 @@ public sealed class CertificationChangeFinderUnitTest
 	{
 		//Arrange
 		string pdfId = "testPdfId";
-		double conversionFactor = 123;
+		decimal conversionFactor = 123;
 		DateTime creationDate = DateTime.Now.AddMinutes(-2);
-		int eN15084ACertification = 855;
+		string eN15084ACertification = "855";
 		int ePDType = 8;
 		string functionalUnit = "testFunctionalUnit";
 		int functionalUnitAmount = 4;
@@ -363,7 +363,7 @@ public sealed class CertificationChangeFinderUnitTest
 		var result = _uut.FindCertificationChanges(products);
 
 		//Assert
-		Assert.Equal(pdfId, result.First().ePDs.First().PdfId);
-		Assert.Equal(testA1, result.First().ePDs.First().EPDIndicatorLines!.A1);
+		Assert.Equal(pdfId, result.First().EPDs.First().PdfId);
+		Assert.Equal(testA1, result.First().EPDs.First().EPDIndicatorLines!.A1);
 	}
 }

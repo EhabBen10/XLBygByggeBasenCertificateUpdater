@@ -6,8 +6,11 @@ public sealed class CsvToXlsxConverter : ICsvToXlsxConverter
 {
 	public void ConvertToXlsx(ICollection<string> csvFilePath)
 	{
+
 		string certificationFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
-		string epdFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\EpdUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+		string epdFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\EPDUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+		string hazardFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\HazardUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+
 		ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 		foreach (var path in csvFilePath)
 		{
@@ -36,6 +39,8 @@ public sealed class CsvToXlsxConverter : ICsvToXlsxConverter
 					package.SaveAs(new FileInfo(epdFile));
 				else if (path.Contains("CertificationUpdates"))
 					package.SaveAs(new FileInfo(certificationFile));
+				else if (path.Contains("HazardUpdates"))
+					package.SaveAs(new FileInfo(hazardFile));
 				else
 					throw new FileNotFoundException(nameof(path));
 			}

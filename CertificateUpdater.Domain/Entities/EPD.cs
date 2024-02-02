@@ -1,9 +1,9 @@
 ﻿namespace CertificateUpdater.Domain.Entities;
 public sealed record EPD
 {
-	public double ConversionFactor { get; set; }
+	public decimal ConversionFactor { get; set; }
 	public DateTime CreationDate { get; set; }
-	public int? EN15084ACertification { get; set; }
+	public string? EN15084ACertification { get; set; }
 	public int EPDType { get; set; }
 	public string FunctionalUnit { get; set; } = string.Empty;
 	public int FunctionalUnitAmount { get; set; }

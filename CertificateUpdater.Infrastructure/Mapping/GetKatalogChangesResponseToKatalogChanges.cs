@@ -1,36 +1,26 @@
-﻿using CertificateUpdater.Domain.Entities;
-using CertificateUpdater.Services.Responses.GetKatalogChanges;
+﻿using CertificateUpdater.Services.Responses.GetProductChanges;
 
 namespace CertificateUpdater.Services.Mapping;
-internal static class GetKatalogChangesResponseToKatalogChanges
+internal static class GetProductChangesResponseToProductChanges
 {
-	internal static ICollection<CatChange> ToKatalogChanges(this GetKatalogChangesResponse responses)
+	internal static ICollection<int> ToProductChanges(this GetProductChangesResponse responses)
 	{
 		if (responses is null)
 		{
 			throw new ArgumentNullException(nameof(responses));
 		}
-		ICollection<CatChange> results = new List<CatChange>();
+		ICollection<int> results = new List<int>();
 
-		foreach (var response in responses.Result.CatChangesData)
+		foreach (var response in responses.Result.Result)
 		{
-			if (response is null)
+			if (response == default)
 			{
 				throw new ArgumentNullException(nameof(responses));
 			}
-
-			CatChange result = new()
-			{
-				EmneId = response.EmneId,
-				Tunnr = response.Tunnr,
-				CreatedAt = Convert.ToDateTime(response.Created),
-			};
+			int result = response;
 			results.Add(result);
 		}
-		ICollection<CatChange> filteredObjects = results
-		   .GroupBy(obj => obj.Tunnr)
-				.Select(group => group.OrderByDescending(obj => obj.CreatedAt).First())
-		   .ToList();
+
 		return results;
 	}
 }

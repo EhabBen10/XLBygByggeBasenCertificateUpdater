@@ -1,6 +1,6 @@
 ﻿namespace CertificateUpdater.Domain.RequestBodies;
-public sealed record GetKatalogChangesBody
+public sealed record GetProductChangesBody
 {
-	public TunUser tunuser { get; set; } = new TunUser();
-	public string fromDate { get; set; } = string.Empty;
+	public TunUser tunUser { get; set; } = new TunUser();
+	public string date { get; set; } = string.Empty;
 }

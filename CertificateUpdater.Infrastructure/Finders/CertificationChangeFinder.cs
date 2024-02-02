@@ -63,14 +63,17 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 						break;
 				}
 			}
-			foreach (var dgnbDocument in product.dGNBDocuments)
+			foreach (var dgnbDocument in product.DGNBDocuments)
 			{
 				certificationChange.DGNBQualityStep.Add(Convert.ToString(dgnbDocument.IndicatorNumber) + ":" + Convert.ToString(dgnbDocument.IndicatorStep));
 			}
 			foreach (var epd in product.EPDs ?? Enumerable.Empty<EPD>())
 			{
-				certificationChange.ePDs.Add(epd);
+				certificationChange.EPDs.Add(epd);
 			}
+
+			certificationChange.HazardInfo = product.HazardInfo ?? null;
+
 			certificationChanges.Add(certificationChange);
 		}
 		return certificationChanges;
