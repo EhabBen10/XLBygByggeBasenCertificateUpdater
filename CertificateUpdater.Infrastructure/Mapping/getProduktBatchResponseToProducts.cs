@@ -61,6 +61,11 @@ internal static class getProduktBatchResponseToProducts
 					HazardClass = response.HazardClass,
 					ShippingDesignation = response.ShippingDesignation,
 					UNCode = response.UNCode,
+					CompanyName = response.CompanyName,
+					DBNr = response.DBNr,
+					ProductGroupId = response.ProductGroupId,
+					ProductText = response.ProductText1,
+					SupplierNr = response.SupplierNr,
 				};
 				if (response?.ProductHazardSentencesData != null)
 				{
@@ -159,12 +164,17 @@ internal static class getProduktBatchResponseToProducts
 					creationDateTime = creationDateTime.AddMinutes(offsetMinutes);
 					ePDs.Add(new()
 					{
-						ConversionFactor = ePDData.ConversionFactor,
+						CompanyName = response.CompanyName,
+						DBNr = response.DBNr,
+						ProductGroupId = response.ProductGroupId,
+						ProductText = response.ProductText1,
+						SupplierNr = response.SupplierNr,
+						ConversionFactor = ePDData.ConversionFactor ?? 0,
 						CreationDate = creationDateTime,
 						EN15084ACertification = ePDData.EN15804ACertification?.ToString(),
-						EPDType = ePDData.EPDType,
+						EPDType = ePDData.EPDType ?? 0,
 						FunctionalUnit = ePDData.FunctionalUnit,
-						FunctionalUnitAmount = ePDData.FunctionalUnitAmount,
+						FunctionalUnitAmount = ePDData.FunctionalUnitAmount ?? 0,
 						ISO14025Certified = ePDData.ISO14025Certified ?? false,
 						ISO14040Certified = ePDData.ISO14040Certified ?? false,
 						ISO14044Certified = ePDData.ISO14044Certified ?? false,
@@ -217,7 +227,8 @@ internal static class getProduktBatchResponseToProducts
 				{
 					foreach (var epd in ePDs)
 					{
-						epd.FunctionalUnit = epd.FunctionalUnit.Replace(character.ToString(), string.Empty);
+
+						epd.FunctionalUnit = epd.FunctionalUnit?.Replace(character.ToString(), string.Empty);
 						epd.PdfAppxName = epd.PdfAppxName?.Replace(character.ToString(), string.Empty);
 						epd.PdfName = epd.PdfName?.Replace(character.ToString(), string.Empty);
 						if (epd.EPDIndicatorLines is not null && epd.EPDIndicatorLines.Indicator is not null)

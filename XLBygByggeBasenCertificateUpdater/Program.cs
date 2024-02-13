@@ -1,12 +1,13 @@
-﻿using CertificateUpdater.Services.AWSSimulators;
+﻿using CertificateUpdater.Domain.Shared;
+using CertificateUpdater.Services.AWSSimulators;
 using CertificateUpdater.Services.Finders;
 using CertificateUpdater.Services.Interfaces;
 using CertificateUpdater.Services.Providers;
 using CertificateUpdater.Services.RestSharp;
 using CertificateUpdater.Services.Services;
+using CertificateUpdater.Services.Services.CSVFileCreators;
 using CertificateUpdater.Services.Settings;
 using Microsoft.Extensions.Options;
-
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG
@@ -40,9 +41,13 @@ BaseSettings settings = new ByggeBasenSettings()
 IOptions<BaseSettings> byggeBasenSettings = Options.Create(settings);
 IClient<BaseSettings> client = new RestSharpClient<BaseSettings>(byggeBasenSettings);
 ICertificationChangeFinder certificationChangeFinder = new CertificationChangeFinder();
+IEPDChangeFinder ePDChangeFinder = new EPDChangeFinder();
+IHazardChangeFinder hazardChangeFinder = new HazardChangeFinder();
 IGetProductChangesService getKatalogChangesService = new GetProductChangesService(client, logProvider, credentialProvider);
 IGetProductBatchService getProductBatchService = new GetProductBatchService(client, credentialProvider);
-ICSVFileCreator cSVFileCreator = new CSVFileCreator();
+ICertificationChangeCSVCreator cSVFileCreator = new CertificationChangeCSVCreator();
+IEpdChangeCSVCreator epdChangeCSVCreator = new EpdChangeCSVCreator();
+IHazardChangeCSVCreator hazardChangeCSVCreator = new HazardChangeCSVCreator();
 ICsvToXlsxConverter csvToXlsxConverter = new CsvToXlsxConverter();
 //IPostChangesService postChangesService = new PostChangesService(client, credentialProvider);
 Console.WriteLine("(1/5) Getting all changes");
@@ -62,17 +67,33 @@ if (productResult.IsFailure)
 	Thread.Sleep(10000);
 	return;
 }
-Console.WriteLine("(3/5) Finding changes to certification");
+Console.WriteLine("(3/5) Finding changes to certifications, EPDs and Hazard sentences.");
 var certificationResult = certificationChangeFinder.FindCertificationChanges(productResult.Value);
-Console.WriteLine("(4/5) Creating Csv File");
-var csvResult = cSVFileCreator.CreateCSVFiles(basePath, certificationResult.ToList());
-if (csvResult.IsFailure)
+var epdResult = ePDChangeFinder.FindEPDChanges(productResult.Value);
+var hazardResult = hazardChangeFinder.FindHazardChanges(productResult.Value);
+Console.WriteLine("(4/5) Creating Csv Files");
+var csvResult1 = cSVFileCreator.CreateCertificationChangeCSVFile
+	(basePath, certificationResult.ToList());
+var csvResult2 = epdChangeCSVCreator.CreateEPDCSVFile(basePath, epdResult.ToList());
+var csvResult3 = hazardChangeCSVCreator.CreateHazardCSVFile(basePath, hazardResult.ToList());
+ICollection<Result<string>> csvResult = new List<Result<string>>
 {
-	Console.WriteLine(csvResult.Error.Message);
+	csvResult1,
+	csvResult2,
+	csvResult3
+};
+if (csvResult.Any(x => x.IsFailure))
+{
+	Console.WriteLine(csvResult.FirstOrDefault(x => x.IsFailure == true)!.Error.Message);
 	Thread.Sleep(20000);
 	return;
 }
-csvToXlsxConverter.ConvertToXlsx(csvResult.Value);
+ICollection<string> csvResult4 = new List<string>();
+foreach (var item in csvResult)
+{
+	csvResult4.Add(item.Value);
+}
+csvToXlsxConverter.ConvertToXlsx(basePath, csvResult4);
 Console.WriteLine("(5/5) Updating RunLog");
 logProvider.UpdateLog();
 Console.WriteLine("End");

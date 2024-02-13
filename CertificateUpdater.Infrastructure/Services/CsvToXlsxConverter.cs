@@ -4,12 +4,12 @@ using OfficeOpenXml;
 namespace CertificateUpdater.Services.Services;
 public sealed class CsvToXlsxConverter : ICsvToXlsxConverter
 {
-	public void ConvertToXlsx(ICollection<string> csvFilePath)
+	public void ConvertToXlsx(string basePath, ICollection<string> csvFilePath)
 	{
 
-		string certificationFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
-		string epdFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\EPDUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
-		string hazardFile = @"O:\IT\EG-FIT fællesdrev\Dokumentation\Intern\Varevedligehold\Bæredygtige varer\Byg-e udtræk\ResultCSV\HazardUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+		string certificationFile = @$"{basePath}\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+		string epdFile = @$"{basePath}\ResultCSV\EPDUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+		string hazardFile = @$"{basePath}\ResultCSV\HazardUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
 
 		ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 		foreach (var path in csvFilePath)

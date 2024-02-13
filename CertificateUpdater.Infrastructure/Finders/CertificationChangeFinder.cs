@@ -67,12 +67,6 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 			{
 				certificationChange.DGNBQualityStep.Add(Convert.ToString(dgnbDocument.IndicatorNumber) + ":" + Convert.ToString(dgnbDocument.IndicatorStep));
 			}
-			foreach (var epd in product.EPDs ?? Enumerable.Empty<EPD>())
-			{
-				certificationChange.EPDs.Add(epd);
-			}
-
-			certificationChange.HazardInfo = product.HazardInfo ?? null;
 
 			certificationChanges.Add(certificationChange);
 		}

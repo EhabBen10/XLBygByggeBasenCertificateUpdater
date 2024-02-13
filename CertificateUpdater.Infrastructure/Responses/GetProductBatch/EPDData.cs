@@ -4,7 +4,7 @@ namespace CertificateUpdater.Services.Responses.GetProductBatch;
 internal sealed record EPDData
 {
 	[JsonPropertyName("ConversionFactor")]
-	public decimal ConversionFactor { get; set; }
+	public decimal? ConversionFactor { get; set; }
 
 	[JsonPropertyName("CreationDate")]
 	public string CreationDate { get; set; } = string.Empty;
@@ -13,7 +13,7 @@ internal sealed record EPDData
 	public int? EN15804ACertification { get; set; }
 
 	[JsonPropertyName("EPDType")]
-	public int EPDType { get; set; }
+	public int? EPDType { get; set; }
 
 	[JsonPropertyName("EPD_IndicatorLines")]
 	public List<EPDIndicatorLinesData>? EPDIndicatorLinesData { get; set; }
@@ -22,7 +22,7 @@ internal sealed record EPDData
 	public string FunctionalUnit { get; set; } = string.Empty;
 
 	[JsonPropertyName("FunctionalUnitAmount")]
-	public int FunctionalUnitAmount { get; set; }
+	public int? FunctionalUnitAmount { get; set; }
 
 	[JsonConverter(typeof(CustomBooleanConverter))]
 	[JsonPropertyName("ISO14025Certified")]

@@ -2,9 +2,8 @@
 using CertificateUpdater.Domain.Shared;
 
 namespace CertificateUpdater.Services.Interfaces;
-public interface ICSVFileCreator
+public interface IEpdChangeCSVCreator
 {
-	public Result<ICollection<string>> CreateCSVFiles(string basePath, List<CertificationChange> changes);
-
+	public Result<string> CreateEPDCSVFile(string basePath, List<EPD> epds);
 
 }
