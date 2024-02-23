@@ -20,7 +20,7 @@ public sealed record EPD
 	public DateTime? PdfDate { get; set; }
 	public string? PdfId { get; set; }
 	public string? PdfName { get; set; }
-	public int? ServiceLifeAmount;
+	public int ServiceLifeAmount;
 	public DateTime? ValidFrom { get; set; }
 	public DateTime? ValidTo { get; set; }
 	public EPDIndicatorLines? EPDIndicatorLines { get; set; }

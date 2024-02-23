@@ -30,9 +30,6 @@ public sealed class GetProductBatchService : IGetProductBatchService
 	{
 		IResponse<GetProductBatchResponse> response;
 		Result<ICollection<Product>> allChanges = new List<Product>();
-		//Remove below line after test
-		tunnrs.Add(1990295);
-		tunnrs.Add(1374618);
 		if (tunnrs.IsNullOrEmpty())
 		{
 			return Result.Failure<ICollection<Product>>(new Error("Null value", "No new updates"));

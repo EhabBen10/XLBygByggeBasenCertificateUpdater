@@ -58,7 +58,6 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 			csv.WriteField("Varegruppe id");
 			csv.WriteField("Firmanavn");
 			csv.WriteField("Leverandørnr");
-			csv.WriteField("Record type");
 			csv.WriteField("Varetekst 1");
 			csv.WriteField("Fareklasse");
 			csv.WriteField("Faremærke");
@@ -77,10 +76,10 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 			foreach (HazardInfo hazardInfo in hazardInfos)
 			{
 				csv.WriteField(HazardRecordEnum.ProductInfo);
-				csv.WriteField(hazardInfo.CompanyName);
-				csv.WriteField(hazardInfo.SupplierNr);
 				csv.WriteField(hazardInfo.DBNr);
 				csv.WriteField(hazardInfo.ProductGroupId);
+				csv.WriteField(hazardInfo.CompanyName);
+				csv.WriteField(hazardInfo.SupplierNr);
 				csv.WriteField(hazardInfo.ProductText);
 				csv.WriteField(hazardInfo.HazardClass);
 				csv.WriteField(hazardInfo.HazardMark);
@@ -91,12 +90,11 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 				var productHazardSentences = hazardInfo?.ProductHazardSentences ?? Enumerable.Empty<ProductHazardSentence>();
 				foreach (var item in productHazardSentences)
 				{
-					csv.NextRecord();
 					csv.WriteField(HazardRecordEnum.HazardSentence);
-					csv.WriteField(hazardInfo!.CompanyName);
-					csv.WriteField(hazardInfo.SupplierNr);
-					csv.WriteField(hazardInfo.DBNr);
+					csv.WriteField(hazardInfo!.DBNr);
 					csv.WriteField(hazardInfo.ProductGroupId);
+					csv.WriteField(hazardInfo.CompanyName);
+					csv.WriteField(hazardInfo.SupplierNr);
 					csv.WriteField(hazardInfo.ProductText);
 					csv.WriteField(hazardInfo.HazardClass);
 					csv.WriteField(hazardInfo.HazardMark);
@@ -112,12 +110,11 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 				var productSafetySentences = hazardInfo?.ProductSafetySentences ?? Enumerable.Empty<ProductSafetySentence>();
 				foreach (var item in productSafetySentences)
 				{
-					csv.NextRecord();
 					csv.WriteField(HazardRecordEnum.SafetySentence);
-					csv.WriteField(hazardInfo!.CompanyName);
-					csv.WriteField(hazardInfo.SupplierNr);
-					csv.WriteField(hazardInfo.DBNr);
+					csv.WriteField(hazardInfo!.DBNr);
 					csv.WriteField(hazardInfo.ProductGroupId);
+					csv.WriteField(hazardInfo.CompanyName);
+					csv.WriteField(hazardInfo.SupplierNr);
 					csv.WriteField(hazardInfo.ProductText);
 					csv.WriteField(hazardInfo.HazardClass);
 					csv.WriteField(hazardInfo.HazardMark);
@@ -135,12 +132,11 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 				var productHazardSymbols = hazardInfo?.ProductHazardSymbols ?? Enumerable.Empty<ProductHazardSymbol>();
 				foreach (var item in productHazardSymbols)
 				{
-					csv.NextRecord();
 					csv.WriteField(HazardRecordEnum.HazardSymbol);
-					csv.WriteField(hazardInfo!.CompanyName);
-					csv.WriteField(hazardInfo.SupplierNr);
-					csv.WriteField(hazardInfo.DBNr);
+					csv.WriteField(hazardInfo!.DBNr);
 					csv.WriteField(hazardInfo.ProductGroupId);
+					csv.WriteField(hazardInfo.CompanyName);
+					csv.WriteField(hazardInfo.SupplierNr);
 					csv.WriteField(hazardInfo.ProductText);
 					csv.WriteField(hazardInfo.HazardClass);
 					csv.WriteField(hazardInfo.HazardMark);

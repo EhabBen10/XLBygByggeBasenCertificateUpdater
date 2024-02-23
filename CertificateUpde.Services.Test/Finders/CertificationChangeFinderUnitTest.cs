@@ -40,7 +40,7 @@ public sealed class CertificationChangeFinderUnitTest
 	}
 
 	[Fact]
-	public void FindCertificationChanges_ProductsNotEmpty_CertificationChangeContainsNewChange()
+	public void FindCertificationChanges_ProductsNotEmptyButNoKatalogData_NoChangesAdded()
 	{
 		//Arrange
 		ICollection<Product> products = new List<Product>()
@@ -51,7 +51,68 @@ public sealed class CertificationChangeFinderUnitTest
 				DBNr = _testDBNr,
 				ProductText= _testProductText,
 				SupplierNr=_testSupplierNr,
-				ProductGroupId=_testVareGruppeId
+				ProductGroupId=_testVareGruppeId,
+			}
+		};
+
+		//Act
+		var result = _uut.FindCertificationChanges(products);
+
+		//Assert
+		Assert.Empty(result);
+	}
+
+	[Fact]
+	public void FindCertificationChanges_ProductsNotEmptyAndKatalogDataNotValid_NoChangesAdded()
+	{
+		//Arrange
+		ICollection<Product> products = new List<Product>()
+		{
+			new Product()
+			{
+				CompanyName = _testCompanyName,
+				DBNr = _testDBNr,
+				ProductText= _testProductText,
+				SupplierNr=_testSupplierNr,
+				ProductGroupId=_testVareGruppeId,
+				KatalogData= new List<Katalog>()
+				{
+					new()
+					{
+						EmneId=10000,
+					}
+				}
+			}
+		};
+
+		//Act
+		var result = _uut.FindCertificationChanges(products);
+
+		//Assert
+		Assert.Empty(result);
+	}
+
+	[Fact]
+	public void FindCertificationChanges_ProductsNotEmptyAndKatalogDataIsValid_ChangeAdded()
+	{
+		//Arrange
+		ICollection<Product> products = new List<Product>()
+		{
+			new Product()
+			{
+				CompanyName = _testCompanyName,
+				DBNr = _testDBNr,
+				ProductText= _testProductText,
+				SupplierNr=_testSupplierNr,
+				ProductGroupId=_testVareGruppeId,
+				KatalogData= new List<Katalog>()
+				{
+					new()
+					{
+						EmneId=Convert.ToInt32(CertificationEnum.PEFC),
+						isValid=true
+					}
+				}
 			}
 		};
 
@@ -60,12 +121,14 @@ public sealed class CertificationChangeFinderUnitTest
 
 		//Assert
 		Assert.NotEmpty(result);
-		Assert.Equal(_testCompanyName, result.First().CompanyName);
-		Assert.Equal(_testProductText, result.First().ProductText);
-		Assert.Equal(_testSupplierNr, result.First().SupplierNr);
-		Assert.Equal(_testDBNr, result.First().DBNr);
-		Assert.Equal(_testVareGruppeId, result.First().ProductGroupId);
+		Assert.Equal(_testCompanyName, result.FirstOrDefault().CompanyName);
+		Assert.Equal(_testDBNr, result.FirstOrDefault().DBNr);
+		Assert.Equal(_testSupplierNr, result.FirstOrDefault().SupplierNr);
+		Assert.Equal(_testProductText, result.FirstOrDefault().ProductText);
+		Assert.Equal(_testVareGruppeId, result.FirstOrDefault().ProductGroupId);
+		Assert.True(result.FirstOrDefault().hasPEFC);
 	}
+
 
 	[Fact]
 	public void FindCertificationChanges_ProductWithDGNBDocument_CertificationChangeContainsDgnbChanges()
@@ -91,46 +154,6 @@ public sealed class CertificationChangeFinderUnitTest
 
 		//Assert
 		Assert.Equal("1:2", result.First().DGNBQualityStep.First());
-	}
-
-	[Theory]
-	[InlineData(0, false, false, false, false, false, false, false, false, false, false, false, false)]
-	public void FindCertificationChanges_ProductWithNoCertificationChange_CertificationNotchanged(int certificationEnum, bool hasSvane,
-		bool hasBreeam, bool hasLeed, bool hasC2c, bool hasBlaue, bool hasFsc, bool hasPefc, bool hasIndeklima, bool hasSvaneByg, bool hasAstma, bool hasEpd, bool hasAllergyUk)
-	{
-		//Arrange
-		ICollection<Product> products = new List<Product>()
-		{
-			new Product()
-			{
-				KatalogData= new List<Katalog>()
-				{
-					new()
-					{
-						EmneId = certificationEnum,
-						isValid = false,
-						Tunnr = 23
-					}
-				}
-			}
-		};
-
-		//Act
-		var result = _uut.FindCertificationChanges(products);
-
-		//Assert
-		Assert.Equal(hasSvane, result.First().hasSvanemærke);
-		Assert.Equal(hasBreeam, result.First().hasBREEAM);
-		Assert.Equal(hasLeed, result.First().hasLEED);
-		Assert.Equal(hasC2c, result.First().hasC2C);
-		Assert.Equal(hasBlaue, result.First().hasDBE);
-		Assert.Equal(hasFsc, result.First().hasFSC);
-		Assert.Equal(hasPefc, result.First().hasPEFC);
-		Assert.Equal(hasIndeklima, result.First().hasIndeKlima);
-		Assert.Equal(hasSvaneByg, result.First().hasSvanemærkeByggeri);
-		Assert.Equal(hasAstma, result.First().hasAstmaOgAllergi);
-		Assert.Equal(hasEpd, result.First().hasEPD);
-		Assert.Equal(hasAllergyUk, result.First().hasALUK);
 	}
 
 	[Theory]

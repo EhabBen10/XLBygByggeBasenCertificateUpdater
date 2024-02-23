@@ -38,13 +38,13 @@ internal sealed record ResultData
 	public string? HazardMark { get; set; }
 
 	[JsonPropertyName("Product_HazardSentences")]
-	public ICollection<ProductHazardSentenceData>? ProductHazardSentencesData { get; set; }
+	public ICollection<ProductHazardSentenceData> ProductHazardSentencesData { get; set; } = new List<ProductHazardSentenceData>();
 
 	[JsonPropertyName("Product_HazardSymbols")]
-	public ICollection<ProductHazardSymbolData>? ProductHazardSymbolsData { get; set; }
+	public ICollection<ProductHazardSymbolData> ProductHazardSymbolsData { get; set; } = new List<ProductHazardSymbolData>();
 
 	[JsonPropertyName("Product_SafetySentences")]
-	public ICollection<ProductSafetySentenceData>? ProductSafetySentencesData { get; set; }
+	public ICollection<ProductSafetySentenceData> ProductSafetySentencesData { get; set; } = new List<ProductSafetySentenceData>();
 
 	[JsonPropertyName("ShippingDesignation")]
 	public string? ShippingDesignation { get; set; }

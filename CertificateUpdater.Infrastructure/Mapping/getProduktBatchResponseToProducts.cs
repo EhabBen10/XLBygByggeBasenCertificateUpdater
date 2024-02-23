@@ -21,7 +21,7 @@ internal static class getProduktBatchResponseToProducts
 
 		foreach (var response in responses.Result.ResultData)
 		{
-			if (response is null || response.SupplierNr is null)
+			if (response is null || string.IsNullOrEmpty(response.SupplierNr))
 			{
 				throw new ArgumentNullException(nameof(responses));
 			}
@@ -67,46 +67,43 @@ internal static class getProduktBatchResponseToProducts
 					ProductText = response.ProductText1,
 					SupplierNr = response.SupplierNr,
 				};
-				if (response?.ProductHazardSentencesData != null)
+
+				foreach (var item in response.ProductHazardSentencesData)
 				{
-					foreach (var item in response.ProductHazardSentencesData)
+					result.HazardInfo.ProductHazardSentences.Add(new()
 					{
-						result.HazardInfo.ProductHazardSentences.Add(new()
-						{
-							AjourDate = item.AjourDate,
-							AjourId = item.AjourId,
-							AjourUser = item.AjourUser,
-							Sentence = item.Sentence,
-							SentenceCode = item.SentenceCode
-						});
-					}
+						AjourDate = item.AjourDate,
+						AjourId = item.AjourId,
+						AjourUser = item.AjourUser,
+						Sentence = item.Sentence,
+						SentenceCode = item.SentenceCode
+					});
 				}
-				if (response?.ProductSafetySentencesData != null)
+
+
+				foreach (var item in response.ProductSafetySentencesData)
 				{
-					foreach (var item in response.ProductSafetySentencesData)
+					result.HazardInfo.ProductSafetySentences.Add(new()
 					{
-						result.HazardInfo.ProductSafetySentences.Add(new()
-						{
-							AjourDate = item.AjourDate,
-							AjourId = item.AjourId,
-							AjourUser = item.AjourUser,
-							Sentence = item.Sentence,
-							SentenceCode = item.SentenceCode
-						});
-					}
+						AjourDate = item.AjourDate,
+						AjourId = item.AjourId,
+						AjourUser = item.AjourUser,
+						Sentence = item.Sentence,
+						SentenceCode = item.SentenceCode
+					});
+
 				}
-				if (response?.ProductHazardSymbolsData != null)
+
+				foreach (var item in response.ProductHazardSymbolsData)
 				{
-					foreach (var item in response.ProductHazardSymbolsData)
+					result.HazardInfo.ProductHazardSymbols.Add(new()
 					{
-						result.HazardInfo.ProductHazardSymbols.Add(new()
-						{
-							SymDesc = item.SymDesc,
-							SymImgUrl = item.SymImgUrl,
-							SymName = item.SymName
-						});
-					}
+						SymDesc = item.SymDesc,
+						SymImgUrl = item.SymImgUrl,
+						SymName = item.SymName
+					});
 				}
+
 			}
 			foreach (var character in problematicCharacters)
 			{
@@ -115,7 +112,7 @@ internal static class getProduktBatchResponseToProducts
 				result.CompanyName = result.CompanyName.Replace(character.ToString(), string.Empty);
 			}
 
-			foreach (var katalog in response.KatalogData)
+			foreach (var katalog in response!.KatalogData)
 			{
 				result.KatalogData.Add(new()
 				{
@@ -179,13 +176,13 @@ internal static class getProduktBatchResponseToProducts
 						ISO14040Certified = ePDData.ISO14040Certified ?? false,
 						ISO14044Certified = ePDData.ISO14044Certified ?? false,
 						PdfAppxName = ePDData.PdfAppxName,
-						ServiceLifeAmount = ePDData.ServiceLifeAmount,
-						PdfAppxDate = ePDData.PdfAppxDate?.UnixTimestampWithOffsetToDateTime(),
-						PdfDate = ePDData.PdfDate?.UnixTimestampWithOffsetToDateTime(),
+						ServiceLifeAmount = ePDData.ServiceLifeAmount ?? 0,
+						PdfAppxDate = ePDData.PdfAppxDate?.UnixTimestampWithOffsetToDateTime() ?? new DateTime(1, 1, 1),
+						PdfDate = ePDData.PdfDate?.UnixTimestampWithOffsetToDateTime() ?? new DateTime(1, 1, 1),
 						PdfId = ePDData.PdfID,
 						PdfName = ePDData.PdfName,
-						ValidFrom = ePDData.ValidFrom?.UnixTimestampWithOffsetToDateTime(),
-						ValidTo = ePDData.ValidTo?.UnixTimestampWithOffsetToDateTime(),
+						ValidFrom = ePDData.ValidFrom?.UnixTimestampWithOffsetToDateTime() ?? new DateTime(1, 1, 1),
+						ValidTo = ePDData.ValidTo?.UnixTimestampWithOffsetToDateTime() ?? new DateTime(1, 1, 1),
 						EPDIndicatorLines = new()
 						{
 							A1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.A1 ?? 0,
@@ -216,8 +213,8 @@ internal static class getProduktBatchResponseToProducts
 							D = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D ?? 0,
 							D_1 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D_1 ?? 0,
 							D_2 = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.D_2 ?? 0,
-							EPDHeaderId = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.EPDHeaderId,
-							Id = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.Id,
+							EPDHeaderId = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.EPDHeaderId ?? 0,
+							Id = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.Id ?? 0,
 							Indicator = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.Indicator,
 							PhaseUnit = ePDData.EPDIndicatorLinesData?.FirstOrDefault()?.PhaseUnit,
 						}
@@ -227,16 +224,14 @@ internal static class getProduktBatchResponseToProducts
 				{
 					foreach (var epd in ePDs)
 					{
-
 						epd.FunctionalUnit = epd.FunctionalUnit?.Replace(character.ToString(), string.Empty);
 						epd.PdfAppxName = epd.PdfAppxName?.Replace(character.ToString(), string.Empty);
 						epd.PdfName = epd.PdfName?.Replace(character.ToString(), string.Empty);
-						if (epd.EPDIndicatorLines is not null && epd.EPDIndicatorLines.Indicator is not null)
+						if (epd.EPDIndicatorLines is not null && !string.IsNullOrEmpty(epd.EPDIndicatorLines.Indicator))
 						{
 							epd.EPDIndicatorLines.Indicator = epd.EPDIndicatorLines?.Indicator?.Replace(character.ToString(), string.Empty);
-
 						}
-						if (epd.EPDIndicatorLines is not null && epd.EPDIndicatorLines.PhaseUnit is not null)
+						if (epd.EPDIndicatorLines is not null && !string.IsNullOrEmpty(epd.EPDIndicatorLines.PhaseUnit))
 						{
 							epd.EPDIndicatorLines.PhaseUnit = epd.EPDIndicatorLines?.PhaseUnit?.Replace(character.ToString(), string.Empty);
 						}

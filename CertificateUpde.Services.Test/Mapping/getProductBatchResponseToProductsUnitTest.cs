@@ -14,6 +14,9 @@ public sealed class getProductBatchResponseToProductsUnitTest
 	private readonly ICollection<DGNBDocumentData> _testDGNBDocumentData = new List<DGNBDocumentData>();
 	private readonly ICollection<KatalogData> _testKatalogData = new List<KatalogData>();
 	private readonly ICollection<EPDData> _testEpdData = new List<EPDData>();
+	private readonly ICollection<ProductHazardSentenceData> _testProductHazardSentenceData = new List<ProductHazardSentenceData>();
+	private readonly ICollection<ProductHazardSymbolData> _testProductHazardSymbolData = new List<ProductHazardSymbolData>();
+	private readonly ICollection<ProductSafetySentenceData> _testProductSafetySentencesData = new List<ProductSafetySentenceData>();
 
 	[Fact]
 	public void ToProducts_GetProductBatchResponseNull_ArgumentNullExceptionThrown()
@@ -73,6 +76,21 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		_getProductBatchResponse.Result.ResultData.Add(new()
 		{
 			SupplierNr = null!,
+		});
+
+		// Act
+		var result = Record.Exception(_getProductBatchResponse.ToProducts);
+
+		//Assert
+		Assert.IsType<ArgumentNullException>(result);
+	}
+	[Fact]
+	public void ToProducts_ResultDataSupplierNrEmpty_ArgumentNullExceptionThrown()
+	{
+		// Arrange
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = "",
 		});
 
 		// Act
@@ -146,6 +164,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 
 		_getProductBatchResponse.Result.ResultData.Add(new()
 		{
+			SupplierNr = _testSupplierNr,
 			DGNBDocuments = _testDGNBDocumentData,
 		});
 
@@ -178,6 +197,8 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		_getProductBatchResponse.Result.ResultData.Add(new()
 		{
 			DGNBDocuments = _testDGNBDocumentData,
+			SupplierNr = _testSupplierNr,
+
 		});
 
 		// Act
@@ -291,6 +312,7 @@ public sealed class getProductBatchResponseToProductsUnitTest
 
 		_getProductBatchResponse.Result.ResultData.Add(new()
 		{
+			SupplierNr = _testSupplierNr,
 			EPDDatas = _testEpdData,
 		});
 
@@ -301,12 +323,10 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		Assert.Single(result.First().EPDs!);
 		Assert.Null(result.First().EPDs!.First().PdfAppxName);
 		Assert.Empty(result.First().EPDs!.First().PdfName);
-		Assert.Empty(result.First().EPDs!.First().EPDIndicatorLines!.Indicator);
-		Assert.Empty(result.First().EPDs!.First().EPDIndicatorLines!.PhaseUnit);
 	}
 
 	[Fact]
-	public void ToProducts_EPDDataWith_EPDDataAdded()
+	public void ToProducts_EPDDataWithAllFields_EPDDataAdded()
 	{
 		// Arrange
 		string pdfId = "testPdfId";
@@ -417,6 +437,8 @@ public sealed class getProductBatchResponseToProductsUnitTest
 
 		_getProductBatchResponse.Result.ResultData.Add(new()
 		{
+			SupplierNr = _testSupplierNr,
+
 			EPDDatas = _testEpdData,
 		});
 
@@ -427,4 +449,264 @@ public sealed class getProductBatchResponseToProductsUnitTest
 		Assert.Single(result.First().EPDs!);
 		Assert.Equal(epDData1.EPDType, result.First().EPDs!.First().EPDType);
 	}
+	[Fact]
+	public void ToProducts_EPDIndicatorLinesWithProblematicCharacters_ProblematicCharactersRemovedAdded()
+	{
+		// Arrange
+
+		string testIndicator = "Indicator\twith\nproblematic\rcharacters";
+		string testPhaseUnit = "PhaseUnit\twith\nproblematic\rcharacters";
+		EPDData epDData1 = new()
+		{
+			CreationDate = "/Date(1687989600000+0200)/",
+			PdfAppxDate = "/Date(1687989600000+0200)/",
+			ValidFrom = "/Date(1687989600000+0200)/",
+			ValidTo = "/Date(1687989600000+0200)/",
+			PdfDate = "/Date(1687989600000+0200)/",
+
+			EPDIndicatorLinesData = new List<EPDIndicatorLinesData>() { new()
+			{
+				Indicator = testIndicator,
+				PhaseUnit = testPhaseUnit,
+
+	}
 }
+		};
+		_testEpdData.Add(epDData1);
+
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+
+			EPDDatas = _testEpdData,
+		});
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal("Indicatorwithproblematiccharacters", result.First().EPDs!.First().EPDIndicatorLines.Indicator);
+		Assert.Equal("PhaseUnitwithproblematiccharacters", result.First().EPDs!.First().EPDIndicatorLines.PhaseUnit);
+	}
+	[Fact]
+	public void ToProducts_EPDIndicatorLinesWithNullIndiciatorAndPhase_TheyAreStillNull()
+	{
+		// Arrange
+		EPDData epDData1 = new()
+		{
+			CreationDate = "/Date(1687989600000+0200)/",
+			PdfAppxDate = "/Date(1687989600000+0200)/",
+			ValidFrom = "/Date(1687989600000+0200)/",
+			ValidTo = "/Date(1687989600000+0200)/",
+			PdfDate = "/Date(1687989600000+0200)/",
+
+			EPDIndicatorLinesData = new List<EPDIndicatorLinesData>() { new() }
+		};
+		_testEpdData.Add(epDData1);
+
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			EPDDatas = _testEpdData,
+		});
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Null(result.First().EPDs.First().EPDIndicatorLines?.PhaseUnit);
+		Assert.Null(result.First().EPDs.First().EPDIndicatorLines?.Indicator);
+
+
+	}
+
+	[Fact]
+	public void ToProducts_HazardDataNull_HazardMarkEqual()
+	{
+		// Arrange
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			HasHazardousGoods = true,
+			HazardMark = "testHazardMark",
+		});
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal(_getProductBatchResponse.Result.ResultData.First().HazardMark, result.FirstOrDefault()!.HazardInfo!.HazardMark);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSentences);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSymbols);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductSafetySentences);
+	}
+
+	[Fact]
+	public void ToProducts_HazardDataWithProductHazardSentences_HazardSentencesDataAdded()
+	{
+		// Arrange
+		string _testAjourDate = "testAjourDate";
+		int _testAjourId = 1;
+		string _testAjourUser = "testAjourUser";
+		string _testSentence = "testSentence";
+		string _testSentenceCode = "testSentenceCode";
+
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			HazardMark = "testHazardMark",
+			ProductHazardSentencesData = new List<ProductHazardSentenceData>()
+			{
+				new()
+				{
+					AjourDate=_testAjourDate,
+					AjourId=_testAjourId,
+					AjourUser=_testAjourUser,
+					Sentence=_testSentence,
+					SentenceCode=_testSentenceCode
+				}
+			}
+		});
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal(_getProductBatchResponse.Result.ResultData.First().HazardMark, result.FirstOrDefault()!.HazardInfo!.HazardMark);
+		Assert.NotEmpty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSentences);
+		Assert.Equal(_testSentence, result.FirstOrDefault()!.HazardInfo.ProductHazardSentences.FirstOrDefault().Sentence);
+		Assert.Equal(_testSentenceCode, result.FirstOrDefault()!.HazardInfo.ProductHazardSentences.FirstOrDefault().SentenceCode);
+		Assert.Equal(_testAjourDate, result.FirstOrDefault()!.HazardInfo.ProductHazardSentences.FirstOrDefault().AjourDate);
+		Assert.Equal(_testAjourId, result.FirstOrDefault()!.HazardInfo.ProductHazardSentences.FirstOrDefault().AjourId);
+		Assert.Equal(_testAjourUser, result.FirstOrDefault()!.HazardInfo.ProductHazardSentences.FirstOrDefault().AjourUser);
+
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSymbols);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductSafetySentences);
+	}
+	[Fact]
+	public void ToProducts_HazardDataWithProductSafetySentences_SafetySentencesDataAdded()
+	{
+		// Arrange
+		string _testAjourDate = "testAjourDate";
+		int _testAjourId = 1;
+		string _testAjourUser = "testAjourUser";
+		string _testSentence = "testSentence";
+		string _testSentenceCode = "testSentenceCode";
+
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			HazardMark = "testHazardMark",
+			ProductSafetySentencesData = new List<ProductSafetySentenceData>()
+			{
+				new()
+				{
+					AjourDate=_testAjourDate,
+					AjourId=_testAjourId,
+					AjourUser=_testAjourUser,
+					Sentence=_testSentence,
+					SentenceCode=_testSentenceCode
+				}
+			}
+		});
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal(_getProductBatchResponse.Result.ResultData.First().HazardMark, result.FirstOrDefault()!.HazardInfo!.HazardMark);
+		Assert.NotEmpty(result.FirstOrDefault()!.HazardInfo!.ProductSafetySentences);
+		Assert.Equal(_testSentence, result.FirstOrDefault()!.HazardInfo.ProductSafetySentences.FirstOrDefault().Sentence);
+		Assert.Equal(_testSentenceCode, result.FirstOrDefault()!.HazardInfo.ProductSafetySentences.FirstOrDefault().SentenceCode);
+		Assert.Equal(_testAjourDate, result.FirstOrDefault()!.HazardInfo.ProductSafetySentences.FirstOrDefault().AjourDate);
+		Assert.Equal(_testAjourId, result.FirstOrDefault()!.HazardInfo.ProductSafetySentences.FirstOrDefault().AjourId);
+		Assert.Equal(_testAjourUser, result.FirstOrDefault()!.HazardInfo.ProductSafetySentences.FirstOrDefault().AjourUser);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSymbols);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSentences);
+	}
+	[Fact]
+	public void ToProducts_HazardDataWithProductHazardSymbol_HazardSymbolDataAdded()
+	{
+		// Arrange
+		string _testSymDesc = "testSymDesc";
+		string _testSymImgUrl = "testSymImgUrl";
+		string _testSymName = "testSymName";
+
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			HazardMark = "testHazardMark",
+			ProductHazardSymbolsData = new List<ProductHazardSymbolData>()
+			{
+				new()
+				{
+					SymDesc=_testSymDesc,
+					SymImgUrl=_testSymImgUrl,
+					SymName=_testSymName
+				}
+			}
+		});
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal(_getProductBatchResponse.Result.ResultData.First().HazardMark, result.FirstOrDefault()!.HazardInfo!.HazardMark);
+		Assert.NotEmpty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSymbols);
+		Assert.Equal(_testSymName, result.FirstOrDefault()!.HazardInfo.ProductHazardSymbols.FirstOrDefault().SymName);
+		Assert.Equal(_testSymDesc, result.FirstOrDefault()!.HazardInfo.ProductHazardSymbols.FirstOrDefault().SymDesc);
+		Assert.Equal(_testSymImgUrl, result.FirstOrDefault()!.HazardInfo.ProductHazardSymbols.FirstOrDefault().SymImgUrl);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductSafetySentences);
+		Assert.Empty(result.FirstOrDefault()!.HazardInfo!.ProductHazardSentences);
+	}
+	[Fact]
+	public void ToProducts_ReplaceProblematicCharactersInProductText()
+	{
+		// Arrange
+		string productTextWithProblematicChars = "Product\twith\nproblematic\rcharacters";
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			ProductText1 = productTextWithProblematicChars,
+		});
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal("Productwithproblematiccharacters", result.FirstOrDefault()!.ProductText);
+	}
+
+	[Fact]
+	public void ToProducts_ReplaceProblematicCharactersInSupplierNr()
+	{
+		// Arrange
+		string supplierNrWithProblematicChars = "Supplier\rwith\tproblematic\ncharacters";
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = supplierNrWithProblematicChars,
+		});
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal("Supplierwithproblematiccharacters", result.FirstOrDefault()!.SupplierNr);
+	}
+
+	[Fact]
+	public void ToProducts_ReplaceProblematicCharactersInCompanyName()
+	{
+		// Arrange
+		string companyNameWithProblematicChars = "Company\rName\twith\nproblematic\rcharacters";
+		_getProductBatchResponse.Result.ResultData.Add(new()
+		{
+			SupplierNr = _testSupplierNr,
+			CompanyName = companyNameWithProblematicChars,
+		});
+
+		// Act
+		var result = _getProductBatchResponse.ToProducts();
+
+		// Assert
+		Assert.Equal("CompanyNamewithproblematiccharacters", result.FirstOrDefault()!.CompanyName);
+	}
+
+}
+

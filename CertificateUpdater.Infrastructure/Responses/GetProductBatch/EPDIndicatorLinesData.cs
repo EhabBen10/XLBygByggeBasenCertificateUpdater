@@ -94,8 +94,8 @@ internal sealed record EPDIndicatorLinesData
 	public int? Id { get; set; }
 
 	[JsonPropertyName("Indicator")]
-	public string? Indicator { get; set; } = string.Empty;
+	public string? Indicator { get; set; }
 
 	[JsonPropertyName("PhaseUnit")]
-	public string? PhaseUnit { get; set; } = string.Empty;
+	public string? PhaseUnit { get; set; }
 }

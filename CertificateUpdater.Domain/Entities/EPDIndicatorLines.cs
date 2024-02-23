@@ -31,8 +31,8 @@ public sealed record EPDIndicatorLines
 	public decimal D { get; set; }
 	public decimal D_1 { get; set; }
 	public decimal D_2 { get; set; }
-	public int? EPDHeaderId { get; set; }
-	public int? Id { get; set; }
+	public int EPDHeaderId { get; set; }
+	public int Id { get; set; }
 	public string? Indicator { get; set; }
 	public string? PhaseUnit { get; set; }
 }

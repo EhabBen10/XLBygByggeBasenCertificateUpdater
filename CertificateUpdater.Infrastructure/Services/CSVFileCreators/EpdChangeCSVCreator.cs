@@ -28,7 +28,7 @@ public class EpdChangeCSVCreator : IEpdChangeCSVCreator
 		{
 			string destinationPath = "";
 			// Check if the file name contains the specified string
-			if (Path.GetFileName(filePath).Contains("EpdUpdates"))
+			if (Path.GetFileName(filePath).Contains("EPDUpdates"))
 			{
 				// Build the destination path
 				destinationPath = Path.Combine(epdFolderPath, Path.GetFileName(filePath));
@@ -43,7 +43,6 @@ public class EpdChangeCSVCreator : IEpdChangeCSVCreator
 				}
 				File.Move(filePath, destinationPath);
 			}
-			Console.WriteLine($"Moved: {filePath} to {destinationPath}");
 		}
 
 		try

@@ -7,7 +7,7 @@ public sealed record HazardInfo
 	public string ProductText { get; set; } = string.Empty;
 	public int ProductGroupId { get; set; }
 	public string? HazardClass { get; set; }
-	public string? HazardMark { get; set; }
+	public string HazardMark { get; set; } = string.Empty;
 	public bool? HasHazardousGoods { get; set; }
 	public string? UNCode { get; set; }
 	public string? ShippingDesignation { get; set; }

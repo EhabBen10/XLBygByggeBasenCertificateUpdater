@@ -13,8 +13,29 @@ public sealed class EPDChangeFinderUnitTest
 	private readonly string _testSupplierNr = "testSupplierNr";
 	private readonly int _testDBNr = 4;
 	private readonly int _testVareGruppeId = 1234;
+
 	[Fact]
-	public void FindCertificationChanges_WithEpd_ResultWithEPDsReturned()
+	public void FindFindEPDChanges_WithNoEpd_NoResultReturned()
+	{
+		//Arrange
+
+		ICollection<Product> products = new List<Product>()
+		{
+			new Product()
+			{
+				DBNr = _testDBNr,
+			}
+		};
+
+		//Act
+		var result = _uut.FindEPDChanges(products);
+
+		//Assert
+		Assert.Empty(result);
+
+	}
+	[Fact]
+	public void FindFindEPDChanges_WithEpd_ResultWithEPDsReturned()
 	{
 		//Arrange
 		string pdfId = "testPdfId";
@@ -142,4 +163,35 @@ public sealed class EPDChangeFinderUnitTest
 		Assert.Equal(pdfId, result.First().PdfId);
 		Assert.Equal(testA1, result.First().EPDIndicatorLines!.A1);
 	}
+	[Fact]
+	public void FindFindEPDChanges_WithEpdWithDefaultWhereAppropriate_ResultWithEPDsReturned()
+	{
+		//Arrange
+
+		ICollection<Product> products = new List<Product>()
+		{
+			new Product()
+			{
+				EPDs= new List<EPD>()
+				{
+					new()
+					{
+
+						EPDIndicatorLines = new()
+						{
+
+						}
+					}
+				}
+			}
+		};
+
+		//Act
+		var result = _uut.FindEPDChanges(products);
+
+		//Assert
+		Assert.False(result.First().ISO14025Certified);
+		Assert.Equal(0, result.First().EPDIndicatorLines!.A1);
+	}
+
 }

@@ -43,7 +43,7 @@ internal sealed record EPDData
 	public string? PdfAppxName { get; set; }
 
 	[JsonPropertyName("PdfDate")]
-	public string PdfDate { get; set; } = string.Empty;
+	public string? PdfDate { get; set; }
 
 	[JsonPropertyName("PdfID")]
 	public string PdfID { get; set; } = string.Empty;
@@ -55,8 +55,8 @@ internal sealed record EPDData
 	public int? ServiceLifeAmount { get; set; }
 
 	[JsonPropertyName("ValidFrom")]
-	public string ValidFrom { get; set; } = string.Empty;
+	public string? ValidFrom { get; set; }
 
 	[JsonPropertyName("ValidTo")]
-	public string ValidTo { get; set; } = string.Empty;
+	public string? ValidTo { get; set; }
 }
