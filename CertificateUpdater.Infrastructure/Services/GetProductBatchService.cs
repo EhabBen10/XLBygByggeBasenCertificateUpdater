@@ -66,19 +66,45 @@ public sealed class GetProductBatchService : IGetProductBatchService
 			var json = JsonSerializer.Serialize(body);
 			request.AddParameter("application/json", json, ParameterType.RequestBody);
 
-			response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
-			var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
-			if (changes.IsSuccess)
+			int maxRetries = 3;
+			int retryCount = 0;
+			Result<ICollection<Product>> result;
+
+			do
 			{
-				foreach (var item in changes.Value)
+				try
 				{
-					allChanges.Value.Add(item);
+					response = await RestClient.PostAsync<GetProductBatchResponse>(request, cancellationToken);
+					var changes = response.GetResult(getProduktBatchResponseToProducts.ToProducts);
+
+					if (changes.IsSuccess)
+					{
+						foreach (var item in changes.Value)
+						{
+							allChanges.Value.Add(item);
+						}
+						result = Result.Success(allChanges.Value);
+						break; // Exit the loop if successful
+					}
+					else
+					{
+						ArgumentException argumentException = new();
+						throw argumentException;
+					}
 				}
-			}
-			else
-			{
-				return Result.Failure<ICollection<Product>>(new Error("500", "An unexpected error occured"));
-			}
+				catch (Exception)
+				{
+					// Increment retry count
+					retryCount++;
+
+					// Check if retries exceeded
+					if (retryCount >= maxRetries)
+					{
+						return Result.Failure<ICollection<Product>>(new Error("500", "Maximum retries exceeded"));
+					}
+				}
+			} while (retryCount < maxRetries);
+
 			startNumber = endNumber + 1;
 			endNumber = tunnrs.Count - endNumber < 1000 ? tunnrs.Count : endNumber + 1000;
 		}

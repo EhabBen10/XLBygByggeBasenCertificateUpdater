@@ -178,18 +178,18 @@ public sealed class GetProduktBatchServiceUnitTest
 		// Assert 
 		Assert.True(result.IsFailure);
 		Assert.False(result.IsSuccess);
-		Assert.Equal(new Error("500", "An unexpected error occured"), result.Error);
+		Assert.Equal(new Error("500", "Maximum retries exceeded"), result.Error);
 
 		_clientMock
 			.Verify(x => x
 				.PostAsync<GetProductBatchResponse>(
 					It.IsAny<RestRequest>(),
 					_token),
-				Times.Once);
+				Times.Exactly(3));
 
 		_responseMock
 			.Verify(x => x
-				.GetResult(getProduktBatchResponseToProducts.ToProducts), Times.Once);
+				.GetResult(getProduktBatchResponseToProducts.ToProducts), Times.Exactly(3));
 
 		_credentialProviderMock
 			.Verify(x => x.GetUserName(), Times.Once());

@@ -38,6 +38,7 @@ internal static class getProduktBatchResponseToProducts
 				'\'', // Single quote (Apostrophe)
 				'*',  // Asterisk
 				':',  // Colon
+				';',  // Colon
 				'\\', // Backslash
 				'/',  // Forward slash
 				'?',  // Question mark

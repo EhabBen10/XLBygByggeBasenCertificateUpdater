@@ -157,21 +157,27 @@ public sealed class CertificationChangeFinderUnitTest
 	}
 
 	[Theory]
-	[InlineData((int)CertificationEnum.Svanemærke, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.BREEAM, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.LEED, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.Cradle2Cradle, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.DerBlaueEngel, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.FSC, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.PEFC, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.IndeKlima, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.SvanemærkeByggeri, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.AstmaOgAllergi, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.EPD, false, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.AllergyUK, false, false, false, false, false, false, false, false, false, false, false, false)]
-
+	[InlineData((int)CertificationEnum.Svanemærke, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.BREEAM, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.LEED, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.Cradle2Cradle, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.DerBlaueEngel, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.FSC, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.PEFC, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.IndeKlima, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.SvanemærkeByggeri, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.AstmaOgAllergi, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.EPD, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.AllergyUK, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.M1, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.GlobalCompact, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.EUTR, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.GEV_EMICODE, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.NEMKO, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.SITAC, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
 	public void FindCertificationChanges_ProductWithInvalidCertification_CertificationChangedToFalse(int certificationEnum, bool hasSvane,
-		bool hasBreeam, bool hasLeed, bool hasC2c, bool hasBlaue, bool hasFsc, bool hasPefc, bool hasIndeklima, bool hasSvaneByg, bool hasAstma, bool hasEpd, bool hasAllergyUk)
+		bool hasBreeam, bool hasLeed, bool hasC2c, bool hasBlaue, bool hasFsc, bool hasPefc, bool hasIndeklima, bool hasSvaneByg, bool hasAstma, bool hasEpd, bool hasAllergyUk,
+		bool hasM1, bool hasGlobalCompact, bool hasEUTR, bool hasGEV_EMICODE, bool hasNEMKO, bool hasSITAC)
 	{
 		//Arrange
 		ICollection<Product> products = new List<Product>()
@@ -206,24 +212,37 @@ public sealed class CertificationChangeFinderUnitTest
 		Assert.Equal(hasAstma, result.First().hasAstmaOgAllergi);
 		Assert.Equal(hasEpd, result.First().hasEPD);
 		Assert.Equal(hasAllergyUk, result.First().hasALUK);
+		Assert.Equal(hasEUTR, result.First().hasEUTR);
+		Assert.Equal(hasGEV_EMICODE, result.First().hasGEV_EMICODE);
+		Assert.Equal(hasGlobalCompact, result.First().hasGlobalCompact);
+		Assert.Equal(hasM1, result.First().hasM1);
+		Assert.Equal(hasNEMKO, result.First().hasNEMKO);
+		Assert.Equal(hasSITAC, result.First().hasSITAC);
 	}
 
 	[Theory]
-	[InlineData((int)CertificationEnum.Svanemærke, true, false, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.BREEAM, false, true, false, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.LEED, false, false, true, false, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.Cradle2Cradle, false, false, false, true, false, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.DerBlaueEngel, false, false, false, false, true, false, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.FSC, false, false, false, false, false, true, false, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.PEFC, false, false, false, false, false, false, true, false, false, false, false, false)]
-	[InlineData((int)CertificationEnum.IndeKlima, false, false, false, false, false, false, false, true, false, false, false, false)]
-	[InlineData((int)CertificationEnum.SvanemærkeByggeri, false, false, false, false, false, false, false, false, true, false, false, false)]
-	[InlineData((int)CertificationEnum.AstmaOgAllergi, false, false, false, false, false, false, false, false, false, true, false, false)]
-	[InlineData((int)CertificationEnum.EPD, false, false, false, false, false, false, false, false, false, false, true, false)]
-	[InlineData((int)CertificationEnum.AllergyUK, false, false, false, false, false, false, false, false, false, false, false, true)]
+	[InlineData((int)CertificationEnum.Svanemærke, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.BREEAM, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.LEED, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.Cradle2Cradle, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.DerBlaueEngel, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.FSC, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.PEFC, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.IndeKlima, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.SvanemærkeByggeri, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.AstmaOgAllergi, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.EPD, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.AllergyUK, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.M1, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false)]
+	[InlineData((int)CertificationEnum.GlobalCompact, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false)]
+	[InlineData((int)CertificationEnum.EUTR, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false)]
+	[InlineData((int)CertificationEnum.GEV_EMICODE, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false)]
+	[InlineData((int)CertificationEnum.NEMKO, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false)]
+	[InlineData((int)CertificationEnum.SITAC, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true)]
 
 	public void FindCertificationChanges_ProductWithValidCertification_CertificationChangedToValid(int certificationEnum, bool hasSvane,
-		bool hasBreeam, bool hasLeed, bool hasC2c, bool hasBlaue, bool hasFsc, bool hasPefc, bool hasIndeklima, bool hasSvaneByg, bool hasAstma, bool hasEpd, bool hasAllergyUk)
+		bool hasBreeam, bool hasLeed, bool hasC2c, bool hasBlaue, bool hasFsc, bool hasPefc, bool hasIndeklima, bool hasSvaneByg, bool hasAstma, bool hasEpd, bool hasAllergyUk,
+		bool hasM1, bool hasGlobalCompact, bool hasEUTR, bool hasGEV_EMICODE, bool hasNEMKO, bool hasSITAC)
 	{
 		//Arrange
 		ICollection<Product> products = new List<Product>()
@@ -258,7 +277,11 @@ public sealed class CertificationChangeFinderUnitTest
 		Assert.Equal(hasAstma, result.First().hasAstmaOgAllergi);
 		Assert.Equal(hasEpd, result.First().hasEPD);
 		Assert.Equal(hasAllergyUk, result.First().hasALUK);
+		Assert.Equal(hasEUTR, result.First().hasEUTR);
+		Assert.Equal(hasGEV_EMICODE, result.First().hasGEV_EMICODE);
+		Assert.Equal(hasGlobalCompact, result.First().hasGlobalCompact);
+		Assert.Equal(hasM1, result.First().hasM1);
+		Assert.Equal(hasNEMKO, result.First().hasNEMKO);
+		Assert.Equal(hasSITAC, result.First().hasSITAC);
 	}
-
-
 }
