@@ -83,6 +83,9 @@ public class CertificationChangeFinder : ICertificationChangeFinder
 						case (int)CertificationEnum.PEFC:
 							certificationChange.hasPEFC = katalog.isValid;
 							break;
+						case (int)CertificationEnum.EUBlomsten:
+							certificationChange.hasEUBlomsten = katalog.isValid;
+							break;
 					}
 				}
 			}

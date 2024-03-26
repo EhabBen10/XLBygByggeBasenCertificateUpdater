@@ -20,4 +20,5 @@ public enum CertificationEnum
 	GEV_EMICODE = 49,
 	SvanemærkeByggeri = 54,
 	PEFC = 55,
+	EUBlomsten = 56
 }
