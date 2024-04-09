@@ -107,6 +107,7 @@ public class EpdChangeCSVCreator : IEpdChangeCSVCreator
 			csv.WriteField("ServiceLifeAmount");
 			csv.WriteField("ValidFrom");
 			csv.WriteField("ValidTo");
+			csv.WriteField("Is deleted");
 			csv.NextRecord();
 
 			foreach (EPD epd in epds)
@@ -165,6 +166,7 @@ public class EpdChangeCSVCreator : IEpdChangeCSVCreator
 				csv.WriteField(epd.ServiceLifeAmount);
 				csv.WriteField(epd.ValidFrom);
 				csv.WriteField(epd.ValidTo);
+				csv.WriteField(Convert.ToInt32(epd.IsDeleted));
 				csv.NextRecord();
 			}
 		}

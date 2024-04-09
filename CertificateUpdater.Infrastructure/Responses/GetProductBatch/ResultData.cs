@@ -51,4 +51,6 @@ internal sealed record ResultData
 
 	[JsonPropertyName("UNCode")]
 	public string? UNCode { get; set; }
+	[JsonPropertyName("Slet_dato")]
+	public string Slet_dato { get; set; } = string.Empty;
 }

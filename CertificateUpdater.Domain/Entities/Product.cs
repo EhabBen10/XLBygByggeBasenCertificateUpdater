@@ -10,4 +10,5 @@ public sealed record Product
 	public string ProductText { get; set; } = string.Empty;
 	public int ProductGroupId { get; set; }
 	public HazardInfo? HazardInfo { get; set; }
+	public bool IsDeleted { get; set; }
 }

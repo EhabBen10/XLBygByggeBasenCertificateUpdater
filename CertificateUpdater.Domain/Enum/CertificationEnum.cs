@@ -2,6 +2,7 @@
 public enum CertificationEnum
 {
 	EPD = 24,
+	Energimærkning = 25,
 	IndeKlima = 30,
 	FSC = 32,
 	DGNB = 36,

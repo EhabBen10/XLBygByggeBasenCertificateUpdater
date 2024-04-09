@@ -83,6 +83,8 @@ public sealed class CertificationChangeCSVCreator : ICertificationChangeCSVCreat
 			csv.WriteField("EPD – Miljøvaredeklaration");
 			csv.WriteField("Allergy UK");
 			csv.WriteField("EU Blomsten");
+			csv.WriteField("Energimærkning");
+			csv.WriteField("Is deleted");
 			csv.NextRecord();
 
 			foreach (CertificationChange change in changes)
@@ -124,6 +126,8 @@ public sealed class CertificationChangeCSVCreator : ICertificationChangeCSVCreat
 				csv.WriteField(Convert.ToInt32(change.hasEPD));
 				csv.WriteField(Convert.ToInt32(change.hasALUK));
 				csv.WriteField(Convert.ToInt32(change.hasEUBlomsten));
+				csv.WriteField(Convert.ToInt32(change.hasEnergiMærkning));
+				csv.WriteField(Convert.ToInt32(change.isDeleted));
 				csv.NextRecord();
 			}
 		}

@@ -63,6 +63,7 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 			csv.WriteField("Faremærke");
 			csv.WriteField("UN-kode");
 			csv.WriteField("Leverings designation");
+			csv.WriteField("Is deleted");
 			csv.WriteField("Faresymbol Url");
 			csv.WriteField("Faresymbol beskrivelse");
 			csv.WriteField("Faresymbol navn");
@@ -70,6 +71,7 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 			csv.WriteField("Faresætning kode");
 			csv.WriteField("Sikkerhedssætning");
 			csv.WriteField("Sikkerhedssætning kode");
+
 
 			csv.NextRecord();
 
@@ -85,6 +87,7 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 				csv.WriteField(hazardInfo.HazardMark);
 				csv.WriteField(hazardInfo?.UNCode ?? "");
 				csv.WriteField(hazardInfo?.ShippingDesignation ?? "");
+				csv.WriteField(Convert.ToInt32(hazardInfo!.IsDeleted));
 				csv.NextRecord();
 
 				var productHazardSentences = hazardInfo?.ProductHazardSentences ?? Enumerable.Empty<ProductHazardSentence>();

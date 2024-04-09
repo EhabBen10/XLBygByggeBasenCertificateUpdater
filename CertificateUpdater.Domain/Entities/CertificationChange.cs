@@ -27,4 +27,6 @@ public sealed record CertificationChange
 	public bool hasEPD { get; set; }
 	public bool hasALUK { get; set; }
 	public bool hasEUBlomsten { get; set; }
+	public bool hasEnergiMærkning { get; set; }
+	public bool isDeleted { get; set; }
 }

@@ -52,6 +52,7 @@ internal static class getProduktBatchResponseToProducts
 				DBNr = response.DBNr,
 				CompanyName = response.CompanyName,
 				ProductGroupId = response.ProductGroupId,
+				IsDeleted = !string.IsNullOrWhiteSpace(response.Slet_dato)
 			};
 			if (!response.HazardMark.IsNullOrEmpty())
 			{
@@ -67,6 +68,7 @@ internal static class getProduktBatchResponseToProducts
 					ProductGroupId = response.ProductGroupId,
 					ProductText = response.ProductText1,
 					SupplierNr = response.SupplierNr,
+					IsDeleted = result.IsDeleted,
 				};
 
 				foreach (var item in response.ProductHazardSentencesData)
@@ -162,6 +164,7 @@ internal static class getProduktBatchResponseToProducts
 					creationDateTime = creationDateTime.AddMinutes(offsetMinutes);
 					ePDs.Add(new()
 					{
+						IsDeleted = !string.IsNullOrWhiteSpace(response.Slet_dato),
 						CompanyName = response.CompanyName,
 						DBNr = response.DBNr,
 						ProductGroupId = response.ProductGroupId,
@@ -242,6 +245,7 @@ internal static class getProduktBatchResponseToProducts
 			}
 			results.Add(result);
 		}
+		results.ToList().RemoveAll(x => x.DBNr.ToString().Length != 7);
 		return results;
 	}
 }

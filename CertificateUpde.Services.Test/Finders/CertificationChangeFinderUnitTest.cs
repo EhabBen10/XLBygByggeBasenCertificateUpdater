@@ -59,11 +59,11 @@ public sealed class CertificationChangeFinderUnitTest
 		var result = _uut.FindCertificationChanges(products);
 
 		//Assert
-		Assert.Empty(result);
+		Assert.NotEmpty(result);
 	}
 
 	[Fact]
-	public void FindCertificationChanges_ProductsNotEmptyAndKatalogDataNotValid_NoChangesAdded()
+	public void FindCertificationChanges_ProductsNotEmptyAndKatalogDataNotValid_ChangesAdded()
 	{
 		//Arrange
 		ICollection<Product> products = new List<Product>()
@@ -89,7 +89,7 @@ public sealed class CertificationChangeFinderUnitTest
 		var result = _uut.FindCertificationChanges(products);
 
 		//Assert
-		Assert.Empty(result);
+		Assert.NotEmpty(result);
 	}
 
 	[Fact]

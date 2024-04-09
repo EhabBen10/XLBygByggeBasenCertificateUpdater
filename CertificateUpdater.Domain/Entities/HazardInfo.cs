@@ -14,5 +14,6 @@ public sealed record HazardInfo
 	public List<ProductHazardSentence> ProductHazardSentences { get; set; } = new List<ProductHazardSentence>();
 	public List<ProductSafetySentence> ProductSafetySentences { get; set; } = new List<ProductSafetySentence>();
 	public List<ProductHazardSymbol> ProductHazardSymbols { get; set; } = new List<ProductHazardSymbol>();
+	public bool IsDeleted { get; set; }
 }
 
