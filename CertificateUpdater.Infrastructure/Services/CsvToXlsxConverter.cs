@@ -2,47 +2,72 @@
 using OfficeOpenXml;
 
 namespace CertificateUpdater.Services.Services;
+
 public sealed class CsvToXlsxConverter : ICsvToXlsxConverter
 {
-	public void ConvertToXlsx(string basePath, ICollection<string> csvFilePath)
+	public void ConvertToXlsx(string basePath, ICollection<string> csvFilePaths)
 	{
-
-		string certificationFile = @$"{basePath}\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
-		string epdFile = @$"{basePath}\ResultCSV\EPDUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
-		string hazardFile = @$"{basePath}\ResultCSV\HazardUpdates" + DateTime.Now.ToShortDateString() + ".xlsx";
+		string currentDate = DateTime.Now.ToShortDateString();
+		string certificationBaseFile = @$"{basePath}\ResultCSV\CertificationUpdates_{currentDate}";
+		string epdBaseFile = @$"{basePath}\ResultCSV\EPDUpdates_{currentDate}";
+		string hazardBaseFile = @$"{basePath}\ResultCSV\HazardUpdates_{currentDate}";
 
 		ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-		foreach (var path in csvFilePath)
+
+		foreach (var path in csvFilePaths)
 		{
-			using (ExcelPackage package = new())
+			string baseFile;
+			if (path.Contains("EPDUpdates"))
+				baseFile = epdBaseFile;
+			else if (path.Contains("CertificationUpdates"))
+				baseFile = certificationBaseFile;
+			else if (path.Contains("HazardUpdates"))
+				baseFile = hazardBaseFile;
+			else
+				throw new FileNotFoundException(nameof(path));
+
+			using (ExcelPackage package = new ExcelPackage())
 			{
-				// Create a new worksheet
 				ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
 
-				// Read the CSV file
 				string[] csvLines = File.ReadAllLines(path);
 
-				// Write the CSV data to the worksheet
-				int row = 1;
+				int maxRowsPerFile = 1000000; // Excel limit is typically around 1 million rows
+				int totalRowsWritten = 0;
+				int fileIndex = 1;
+
 				foreach (string csvLine in csvLines)
 				{
 					string[] csvValues = csvLine.Split(';');
 					for (int column = 1; column <= csvValues.Length; column++)
 					{
-						worksheet.Cells[row, column].Value = csvValues[column - 1];
+						worksheet.Cells[totalRowsWritten + 1, column].Value = csvValues[column - 1];
 					}
-					row++;
+
+					totalRowsWritten++;
+
+					// If we reached the maximum rows per file, save the current package and create a new one
+					if (totalRowsWritten == maxRowsPerFile)
+					{
+						string filename = $"{baseFile}_{fileIndex}.xlsx";
+						package.SaveAs(new FileInfo(filename));
+
+						fileIndex++;
+						totalRowsWritten = 0;
+
+						package.Workbook.Worksheets.Add($"Sheet{fileIndex}");
+						worksheet = package.Workbook.Worksheets[$"Sheet{fileIndex}"];
+					}
 				}
 
-				// Save the Excel package to a file
-				if (path.Contains("EPDUpdates"))
-					package.SaveAs(new FileInfo(epdFile));
-				else if (path.Contains("CertificationUpdates"))
-					package.SaveAs(new FileInfo(certificationFile));
-				else if (path.Contains("HazardUpdates"))
-					package.SaveAs(new FileInfo(hazardFile));
-				else
-					throw new FileNotFoundException(nameof(path));
+				// Save the remaining data to the last file
+				if (totalRowsWritten > 0)
+				{
+					string filename = $"{baseFile}_{fileIndex}.xlsx";
+					package.SaveAs(new FileInfo(filename));
+				}
+				package.Dispose();
+
 			}
 			File.Delete(path);
 		}

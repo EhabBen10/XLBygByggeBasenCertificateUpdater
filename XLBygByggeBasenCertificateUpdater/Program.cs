@@ -98,3 +98,12 @@ Console.WriteLine("(5/5) Updating RunLog");
 logProvider.UpdateLog();
 Console.WriteLine("End");
 Thread.Sleep(10000);
+//string basePath = "C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\";
+//ICsvToXlsxConverter csvToXlsxConverter = new CsvToXlsxConverter();
+//ICollection<string> csvResult4 = new List<string>()
+//{
+//	@"C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\ResultCSV\\CertificationUpdates11-04-2024.csv",
+//	@"C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\ResultCSV\\EPDUpdates11-04-2024.csv",
+//	@"C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\ResultCSV\\HazardUpdates11-04-2024.csv"
+//};
+//csvToXlsxConverter.ConvertToXlsx(basePath, csvResult4);
