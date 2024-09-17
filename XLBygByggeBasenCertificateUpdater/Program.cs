@@ -11,7 +11,8 @@ using Microsoft.Extensions.Options;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG
-string basePath = "C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\";
+//string basePath = "C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\";
+string basePath = "O:\\\\IT\\\\EG-FIT fællesdrev\\\\Dokumentation\\\\Intern\\\\Varevedligehold\\\\Bæredygtige varer\\\\Byg-e udtræk\\\\AWSSimulator\\\\";
 IDateTimeProvider dateTimeProvider = new DateTimeProvider();
 ILogProvider logProvider = new LocalFileLogProvider(basePath + "RunLog.txt", dateTimeProvider);
 ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "TunUserNr.txt", basePath + "UserName.txt",
