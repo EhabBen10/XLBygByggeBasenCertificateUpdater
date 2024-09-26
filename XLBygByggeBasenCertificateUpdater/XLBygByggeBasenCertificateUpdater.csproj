@@ -11,4 +11,8 @@
     <ProjectReference Include="..\CertificateUpdater.Infrastructure\CertificateUpdater.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>
