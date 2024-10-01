@@ -11,7 +11,7 @@ public class HazardChangeCSVCreator : IHazardChangeCSVCreator
 {
 	public Result<string> CreateHazardCSVFile(string basePath, List<HazardInfo> hazardInfos)
 	{
-		string hazardFile = @$"{basePath}\ResultCSV\HazardUpdates" + DateTime.Now.ToShortDateString() + ".csv";
+		string hazardFile = @$"{basePath}\ResultCSV\HazardUpdates" + ".csv";
 		if (File.Exists(hazardFile))
 		{
 			File.Delete(hazardFile);

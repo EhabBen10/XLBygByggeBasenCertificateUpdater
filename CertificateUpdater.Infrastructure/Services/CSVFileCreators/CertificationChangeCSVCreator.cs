@@ -11,7 +11,7 @@ public sealed class CertificationChangeCSVCreator : ICertificationChangeCSVCreat
 {
 	public Result<string> CreateCertificationChangeCSVFile(string basePath, List<CertificationChange> changes)
 	{
-		string certificationFile = @$"{basePath}\ResultCSV\CertificationUpdates" + DateTime.Now.ToShortDateString() + ".csv";
+		string certificationFile = @$"{basePath}\ResultCSV\CertificationUpdates" + ".csv";
 
 		if (File.Exists(certificationFile))
 		{

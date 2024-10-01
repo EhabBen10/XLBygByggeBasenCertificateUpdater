@@ -10,7 +10,7 @@ public class EpdChangeCSVCreator : IEpdChangeCSVCreator
 {
 	public Result<string> CreateEPDCSVFile(string basePath, List<EPD> epds)
 	{
-		string epdFile = @$"{basePath}\ResultCSV\EPDUpdates" + DateTime.Now.ToShortDateString() + ".csv";
+		string epdFile = @$"{basePath}\ResultCSV\EPDUpdates" + ".csv";
 		if (File.Exists(epdFile))
 		{
 			File.Delete(epdFile);

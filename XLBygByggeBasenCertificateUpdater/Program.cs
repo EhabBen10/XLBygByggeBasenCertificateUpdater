@@ -12,12 +12,11 @@ using Microsoft.Extensions.Options;
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG
 //string basePath = "C:\\Users\\AME\\OneDrive - XL-BYG a.m.b.a\\Vigtige filer\\ByggebasenTest\\";
-string basePath = "\\\\lokal.ditas.dk\\data\\IT\\EG-FIT fællesdrev\\Dokumentation\\Intern\\Varevedligehold\\Bæredygtige varer\\Byg-e udtræk\\AWSSimulator\\";
-Console.WriteLine(basePath);
+string basePath = "\\\\lokal.ditas.dk\\data\\IT\\EG-FIT fællesdrev\\Dokumentation\\Intern\\Varevedligehold\\Bæredygtige varer\\Byg-e udtræk\\";
 IDateTimeProvider dateTimeProvider = new DateTimeProvider();
-ILogProvider logProvider = new LocalFileLogProvider(basePath + "RunLog.txt", dateTimeProvider);
-ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "TunUserNr.txt", basePath + "UserName.txt",
-	basePath + "Password.txt", basePath + "Aspect4Username.txt", basePath + "Aspect4Password.txt");
+ILogProvider logProvider = new LocalFileLogProvider(basePath + "AWSSimulator\\RunLog.txt", dateTimeProvider);
+ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "AWSSimulator\\TunUserNr.txt", basePath + "AWSSimulator\\UserName.txt",
+	basePath + "AWSSimulator\\Password.txt", basePath + "AWSSimulator\\Aspect4Username.txt", basePath + "AWSSimulator\\Aspect4Password.txt");
 BaseSettings settings = new ByggeBasenSettings()
 {
 	BaseUrl = "http://services.byggebasen.dk/V3/BBService.svc/",
@@ -26,11 +25,11 @@ BaseSettings settings = new ByggeBasenSettings()
 	TunUserNr = credentialProvider.GetTunUserNr(),
 };
 #else
-string basePath = "O:\\IT\\EG-FIT fællesdrev\\Dokumentation\\Intern\\Varevedligehold\\Bæredygtige varer\\Byg-e udtræk\\";
+string basePath = "\\\\lokal.ditas.dk\\data\\IT\\EG-FIT fællesdrev\\Dokumentation\\Intern\\Varevedligehold\\Bæredygtige varer\\Byg-e udtræk\\";
 IDateTimeProvider dateTimeProvider = new DateTimeProvider();
 ILogProvider logProvider = new LocalFileLogProvider(basePath + "AWSSimulator\\RunLog.txt", dateTimeProvider);
 ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "AWSSimulator\\TunUserNr.txt", basePath + "AWSSimulator\\UserName.txt",
-basePath + "AWSSimulator\\Password.txt", basePath + "AWSSimulator\\Aspect4Username.txt", basePath + "Aspect4Password.txt");
+	basePath + "AWSSimulator\\Password.txt", basePath + "AWSSimulator\\Aspect4Username.txt", basePath + "AWSSimulator\\Aspect4Password.txt");
 BaseSettings settings = new ByggeBasenSettings()
 {
 	BaseUrl = "http://services.byggebasen.dk/V3/BBService.svc/",

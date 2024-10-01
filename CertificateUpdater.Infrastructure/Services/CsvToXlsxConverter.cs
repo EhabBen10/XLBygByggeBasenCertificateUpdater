@@ -8,9 +8,9 @@ public sealed class CsvToXlsxConverter : ICsvToXlsxConverter
 	public void ConvertToXlsx(string basePath, ICollection<string> csvFilePaths)
 	{
 		string currentDate = DateTime.Now.ToShortDateString();
-		string certificationBaseFile = @$"{basePath}\ResultCSV\CertificationUpdates_{currentDate}";
-		string epdBaseFile = @$"{basePath}\ResultCSV\EPDUpdates_{currentDate}";
-		string hazardBaseFile = @$"{basePath}\ResultCSV\HazardUpdates_{currentDate}";
+		string certificationBaseFile = @$"{basePath}\ResultCSV\CertificationUpdates";
+		string epdBaseFile = @$"{basePath}\ResultCSV\EPDUpdates";
+		string hazardBaseFile = @$"{basePath}\ResultCSV\HazardUpdates";
 
 		ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
