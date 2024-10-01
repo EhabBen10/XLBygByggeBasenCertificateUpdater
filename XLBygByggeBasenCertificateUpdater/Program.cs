@@ -32,6 +32,8 @@ IDateTimeProvider dateTimeProvider = new DateTimeProvider();
 ILogProvider logProvider = new LocalFileLogProvider(basePath + "AWSSimulator\\RunLog.txt", dateTimeProvider);
 ICredentialProvider credentialProvider = new LocalFileCredentialProvider(basePath + "AWSSimulator\\TunUserNr.txt", basePath + "AWSSimulator\\UserName.txt",
 	basePath + "AWSSimulator\\Password.txt", basePath + "AWSSimulator\\Aspect4Username.txt", basePath + "AWSSimulator\\Aspect4Password.txt");
+LoggingToPowerAutomate loggingToPowerAutomate = new LoggingToPowerAutomate(basePath + "AWSSimulator\\AutomateLog.txt");
+
 BaseSettings settings = new ByggeBasenSettings()
 {
 	BaseUrl = "http://services.byggebasen.dk/V3/BBService.svc/",
