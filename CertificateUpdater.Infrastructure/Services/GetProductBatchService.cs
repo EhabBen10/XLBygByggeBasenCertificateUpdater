@@ -58,7 +58,7 @@ public sealed class GetProductBatchService : IGetProductBatchService
 		List<int> failedTunnrs = new List<int>();
 		Console.WriteLine($"Getting {totalProducts} products in {totalBatches} batches.");
 		int completedBatches = 0;
-		int maxConcurrency = 1;
+		int maxConcurrency = 3;
 		SemaphoreSlim semaphore = new SemaphoreSlim(maxConcurrency); // Semaphore to limit concurrency
 
 		for (int start = 0; start < totalProducts; start += batchSize)
